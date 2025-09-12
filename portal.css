@@ -1,0 +1,217 @@
+@charset "UTF-8";
+:root {
+    --input-font-size: 1.4em;
+    --button-height: 45px;
+    --lfont: 1.3em;
+    --border: 1px solid #000000;
+    --radius: 12px;
+    --tr-he: 35px;
+}
+body{
+    background-image: url(paint_00016.png);
+    background-color: rgba(255, 255, 255, 0.4);
+    background-blend-mode: screen;
+    background-repeat: no-repeat;
+    /*background-position: null;
+    background-size: 100%;
+    background-attachment: fixed;*/
+}
+h1 { font-size: 2.4em; }
+h2 { font-size: 1.8em; }
+
+#midashi {
+    text-align: center;
+}
+#haikeis {
+    margin: 0 0 0 auto;
+    text-align: right;
+}
+#time {
+    margin: -100px 0 0 auto;
+    font-size: 1.2em;
+    text-align: right;
+}
+#kensaku {
+    text-align: center;
+    margin: 40px 0px 0px 0px;
+}
+#sentaku {
+    height: 45px;
+    width: 160px;
+    border: var(--border);
+    border-radius: var(--radius);
+    font-size: 1.4em;
+}
+#searchbox {
+    height: 45px;
+    width: 550px;
+    font-size: 1.4em;
+    border: var(--border);
+    border-radius: var(--radius);
+}
+
+#yosoku {
+    max-height: 240px;
+    width: 547px;
+    font-size: 1.4em;
+    position: absolute;
+    border: 2px solid #000000;
+    border-radius: 0px 0px var(--radius) var(--radius);
+    background-color: #fdfdfd;
+    margin-left: 409px;
+    text-align: left;
+    overflow: auto;
+}
+#yosoku div {
+    margin-top: 5px;
+}
+#yosoku div.over {
+    color: #000000;
+    background-color: #dedede;
+}
+#yosoku div.select {
+    color: #000000;
+    background-color: #dedede;
+}
+
+#searchbtn {
+    height: 45px;
+    width: 40px;
+    border: var(--border);
+    border-radius: var(--radius);
+    font-size: 1.4em;
+}
+/*ul {
+    list-style-type: none;
+}*/
+.links h2 {
+    margin-bottom: 5px;
+}
+a {
+    font-size: 1.3em;
+}
+
+#calmid {
+    text-align: right;
+}
+#calender {
+    height: 270px;
+    width: 350px;
+    font-size: 1.4em;
+    border: var(--border);
+    border-collapse: collapse;
+    border-radius: 22px;
+    margin: 0 0 0 auto;
+}
+.sun { color: red; }
+.sat { color: blue; }
+
+#newslinks {
+    margin: -345px 0px 0px 0px;
+}
+#trainlinks {
+    margin: -415px 0px 0px 280px;
+}
+#zisinlinks {
+    margin: 0px 0px 0px 280px;
+}
+#netlinks {
+    margin: 0px 0px 0px 280px;
+}
+#wtoollinks {
+    margin: -565px 0px 0px 580px;
+}
+#designlinks {
+    margin: 0px 0px 0px 580px;
+}
+#schoollinks {
+    margin: 0px 0px 0px 580px;
+}
+
+#flink {
+    margin: -160px 0 0 auto;
+    height: 350px;
+    width: 310px;
+    flex-wrap: wrap;
+    text-align: right;
+}
+.fpic {
+    height: 100px;
+    width: 300px;
+}
+
+#trains {
+    margin-top: -100px;
+    margin-bottom: 100px;
+}
+#tcomp {
+    height: var(--tr-he);
+    width: 240px;
+    font-size: 1.2em;
+}
+#trainid {
+    height: var(--tr-he);
+    width: 105px;
+    font-size: 1.2em;
+}
+#tcode {
+    height: var(--tr-he);
+    width: 45px;
+    font-size: 1.2em;
+}
+#ts {
+    height: 35px;
+    width: 100px;
+    font-size: 1.2em;
+}
+
+#funnys summary {
+    font-size: var(--lfont);
+    width: 300px;
+    /*display: inline-block;*/
+}
+#funnys a {
+    font-size: var(--lfont);
+}
+
+#kaigyo summary {
+    font-size: var(--lfont);
+    width: 300px;
+    /*display: inline-block;*/
+}
+
+#kanji-kaku summary {
+    font-size: var(--lfont);
+    width: 300px;
+    /*display: inline-block;*/
+}
+#kanji {
+    height: 30px;
+    width: 220px;
+    font-size: 1.2em;
+}
+#kanji-l {
+    font-size: 6.0em;
+}
+
+#hbr {
+    height: 800px;
+    width: 100px;
+}
+
+#kuhaku {
+    height: 100px;
+}
+#c {
+    text-align: center;
+    font-size: 0.8em;
+}
+
+/*@media (max-width: 1334px) {
+    #calmid, #calender {
+        margin: 0px 0px 0px 0px;
+    }
+    #trainlinks, #designlinks, #newslinks {
+        margin-top: 0px;
+    }
+}*/

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta name="viewport" content="width=device-width", initial-scale="1.0">
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="portal.css"/>
+        <title>Portal</title>
+    </head>
+    <body><!--background="rem2.png"-->
+        <h1 id="midashi">Portal&nbsp;Page</h1>
+        <h2 id="time"></h2>
+        <div id="haikeis">
+            <select id="haikei">
+                <option value="rem-zero">レム[ゼロから]</option>
+                <option value="rem">レム[ノーマル]</option>
+                <!--<option value="rem-d">レム[ダブル]</option>-->
+                <option value="paint" selected>ペイント柄</option>
+                <option value="white">真っ白[背景なし]</option>
+                <option value="custom">カスタム</option>
+            </select>
+        </div>
+        <div id="kensaku">
+            <select id="sentaku">
+                <option value="search">検索・移動</option>
+                <option value="realtime">リアルタイム (X)</option>
+                <option value="gyotakun">魚拓(名前)</option>
+                <option value="gyotaku">魚拓(URL)</option>
+                <option value="tashiro">起動</option>
+            </select>
+            <input type="search" id="searchbox" placeholder="Google検索&nbsp;or&nbsp;URLをプロトコルから直接入力" list="aucomp" autocomplete="off">
+            <div id="yosoku" tabindex="-1"></div>
+            <input type="button" id="searchbtn" value="🔍" onclick="search()">
+        </div>
+
+        <hr>
+
+        <div id="calmid">
+            <h3>2025&nbsp;September</h3>
+            <div id="calender">
+                <table>
+                    <tr>
+                        <th class="sun">Sun</th>
+                        <th>Mon</th>
+                        <th>Tue</th>
+                        <th>Wed</th>
+                        <th>Thu</th>
+                        <th>Fri</th>
+                        <th class="sat">Sat</th>
+                    </tr>
+                    <tr>
+                        <td class="sun">31</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td class="sat">6</td>
+                    </tr>
+                    <tr>
+                        <td class="sun">7</td>
+                        <td>8</td>
+                        <td>9</td>
+                        <td>10</td>
+                        <td>11</td>
+                        <td>12</td>
+                        <td class="sat">13</td>
+                    </tr>
+                    <tr>
+                        <td class="sun">14</td>
+                        <td>15</td>
+                        <td>16</td>
+                        <td>17</td>
+                        <td>18</td>
+                        <td>19</td>
+                        <td class="sat">20</td>
+                    </tr>
+                    <tr>
+                        <td class="sun">21</td>
+                        <td>22</td>
+                        <td>23</td>
+                        <td>24</td>
+                        <td>25</td>
+                        <td>26</td>
+                        <td class="sat">27</td>
+                    </tr>
+                    <tr>
+                        <td class="sun">28</td>
+                        <td>29</td>
+                        <td>30</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td class="sat">4</td>
+                    </tr>
+                    <tr>
+                        <td class="sun">5</td>
+                        <td>6</td>
+                        <td>7</td>
+                        <td>8</td>
+                        <td>9</td>
+                        <td>10</td>
+                        <td class="sat">11</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="links">
+
+            <div id="newslinks">
+                <h2>ニュース</h2>
+                <ul>
+                    <li><a href="https://news.google.com/" target="_blank">Googleニュース</a></li>
+                    <li><a href="https://news.yahoo.co.jp/" target="_blank">Yahoo!ニュース</a></li>
+                    <li><a href="#ascii">ASCIIからのニュース</a></li>
+                </ul>
+            </div>
+
+            <div id="tenkilinks">
+                <h2>天気・気象情報</h2>
+                <ul>
+                    <li><a href="leaflet/weather.html" target="_blank">マルチ天気地図</a></li>
+                    <li><a href="https://weathernews.jp/" target="_blank">ウェザーニュース</a></li>
+                    <li><a href="https://tenki.jp/" target="_blank">tenki.jp</a></li>
+                    <li><a href="https://www.jma.go.jp/" target="_blank">気象庁<strong>トップページ</strong></a></li>
+                    <li><a href="https://www.jma.go.jp/bosai/#pattern=forecast" target="_blank">気象庁<strong>地域の天気</strong></a></li>
+                </ul>
+            </div>
+
+            <div id="trainlinks">
+                <h2>鉄道情報</h2>
+                <ul>
+                    <li><a href="https://transit.yahoo.co.jp/" target="_blank">Yahoo!乗換・運行情報</a></li>
+                    <li><a href="https://trafficinfo.westjr.co.jp/kinki.html" target="_blank">JR西&nbsp;関西エリア運行情報</a></li>
+                    <li><a href="https://e5489.jr-odekake.net/e5489/cspc/CBTopMenuPC" target="_blank">e5489</a></li>
+                    <li><a href="https://traininfo.jreast.co.jp/train_info/kanto.aspx" target="_blank">JR東&nbsp;関東エリア運行情報</a></li>
+                </ul>
+            </div>
+
+            <div id="zisinlinks">
+                <h2>地震情報</h2>
+                <ul>
+                    <li><a href="https://typhoon.yahoo.co.jp/weather/jp/earthquake/kyoshin/" target="_blank">Yahoo!リアルタイム<br>地震モニタ</a></li>
+                    <li><a href="http://www.kmoni.bosai.go.jp/" target="_blank">防災科研&nbsp;強震モニタ</a></li>
+                </ul>
+            </div>
+
+            <div id="netlinks">
+                <h2>ネットツール</h2>
+                <ul>
+                    <li><a href="https://fast.com/" target="_blank">fast.com</a></li>
+                    <li><a href="https://youtube.com/" target="_blank">Youtube</a></li>
+                    <li><a href="https://music.youtube.com/" target="_blank">Youtube&nbsp;Music</a></li>
+                </ul>
+            </div>
+
+            <div id="wtoollinks">
+                <h2>ワークツール</h2>
+                <ul>
+                    <li><a href="https://gemini.google.com/app" target="_blank">Google&nbsp;Gemini</a></li>
+                    <li><a href="https://teams.microsoft.com/v2/" target="_blank">Microsoft&nbsp;Teams(アプリ)</a></li>
+                    <li><a href="https://drive.google.com/" target="_blank">Google&nbsp;Drive</a></li>
+                    <li><a href="https://www.office.com/" target="_blank">Microsoft&nbsp;Office</a></li>
+                </ul>
+            </div>
+
+            <div id="designlinks">
+                <h2>デザイン関係</h2>
+                <ul>
+                    <li><a href="https://canva.com/" target="_blank">Canva(アプリ)</a></li>
+                    <li><a href="https://kleki.com/?lang=ja" target="_blank">Kleki(webペイントツール)</a></li>
+                </ul>
+            </div>
+
+            <div id="schoollinks">
+                <h2>学校系</h2>
+                <ul>
+                    <li><a href="https://ela.education.ne.jp/AX2m1AzTociOEAskSooCkIcSgcU2qAoQygqkWkYIaa8/students" target="_blank">eライブラリ</a></li>
+                    <li><a href="https://qrcode.onl.jp/" target="_blank">QRコード読み取り</a></li>
+                </ul>
+            </div>
+
+        </div><!--links終わり-->
+
+        <div id="flink">
+            <a href="https://google.com/search?q=N225&ie=UTF-8" target="_blank"><img src="banner_n225.png" id="n225" class="fpic"></a>
+            <a href="https://google.com/search?q=USD%2FJPY&ie=UTF-8" target="_blank"><img src="banner_usd.png" id="usd" class="fpic"></a>
+            <a href="https://google.com/search?q=TWD%2FJPY&ie=UTF-8" target="_blank"><img src="banner_twd.png" id="twd" class="fpic"></a>
+        </div>
+
+        <div id="trains">
+            <h2>列車番号で列車を検索</h2>
+            <select id="tcomp">
+                <option value="新幹線">新幹線</option>
+                <option value="JR北海道">JR北海道</option>
+                <option value="JR東日本">JR東日本</option>
+                <option value="JR東海">JR東海</option>
+                <option value="JR西日本">JR西日本</option>
+                <option value="JR四国">JR四国</option>
+                <option value="JR九州">JR九州</option>
+                <option value="JR貨物">JR貨物</option>
+                <option value="">その他（会社名無記名で）</option>
+            </select>
+            <input type="search" id="trainid" placeholder="列車番号">
+            <select id="tcode">
+                <option value="M">M</option>
+                <option value="D">D</option>
+                <option value="レ">レ（なし）</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="E">E</option>
+                <option value="G">G</option>
+                <option value="H">H</option>
+                <option value="K">K</option>
+                <option value="S">S</option>
+                <option value="T">T</option>
+            </select>
+            <input type="button" id="ts" value="列車検索" onclick="ts()">
+        </div>
+
+        <details id="kaigyo">
+            <summary>背景視聴用空白</summary>
+            <div id="hbr"></div>
+        </details>
+
+        <details id="kanji-kaku" open>
+            <summary>漢字拡大</summary>
+            <input type="search" id="kanji" placeholder="漢字を入力">
+            <div id="kanji-l"></div>
+        </details>
+
+        <br><br>
+
+        <details id="funnys">
+            <summary>面白いGoogle検索</summary>
+            <ul>
+                <li><a href="https://google.com/search?q=出口&ie=UTF-8" target="_blank">「出口」</a></li>
+                <li><a href="https://google.com/search?q=Minecraft&ie=UTF-8" target="_blank">「Minecraft」</a></li>
+                <li><a href="https://google.com/search?q=トマト祭り&ie=UTF-8" target="_blank">「トマト祭り」</a></li>
+                <li><a href="https://google.com/search?q=askew&ie=UTF-8" target="_blank">「askew」</a></li>
+                <li><a href="https://google.com/search?q=一回転&ie=UTF-8" target="_blank">「一回転」</a></li>
+                <li><a href="https://google.com/search?q=blink+tag&ie=UTF-8" target="_blank">「blink&nbsp;tag」</a></li>
+                <li><a href="https://google.com/search?q=Festivus&ie=UTF-8" target="_blank">「Festivus」</a></li>
+                <li><a href="https://google.com/search?q=三目並べ&&ie=UTF-8" target="_blank">「三目並べ」</a></li>
+                <li><a href="https://google.com/search?q=マインスイーパー&ie=UTF-8" target="_blank">「マインスイーパー」</a></li>
+                <li><a href="https://google.com/search?q=スーパーマリオブラザーズ&ie=UTF-8" target="_blank">「スーパーマリオブラザーズ」</a></li>
+                <li><a href="https://google.com/search?q=ヘビゲーム&ie=UTF-8" target="_blank">「ヘビゲーム」</a></li>
+            </ul>
+        </details>
+
+        <div id="kuhaku"></div>
+
+        <p id="c">Copyright&copy;2025&nbsp;kumoroha.github.io&nbsp;All&nbsp;Rights&nbsp;Reserved.</p>
+
+        <script src="clock.js"></script>
+        <script src="set.js"></script>
+        <script src="suggest.js"></script>
+        <script src="portal.js"></script>
+    </body>
+</html>
