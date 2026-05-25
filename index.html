@@ -60,7 +60,7 @@
             animation: gradientMove 15s ease infinite;
             color: var(--text-main);
             min-height: 100vh;
-            padding: 10px 20px 40px 20px; /* 上部のマージンをほぼ無くす（詰め） */
+            padding: 10px 20px 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -75,7 +75,7 @@
 
         .container {
             width: 100%;
-            max-width: 1240px; /* iPadの横幅にゆとりを持たせるサイズ */
+            max-width: 1240px;
             position: relative;
         }
 
@@ -122,15 +122,15 @@
         /* --- ヘッダー / Google 検索セクション --- */
         header {
             text-align: center;
-            margin-bottom: 35px; /* 下部マージンもややタイトに */
-            padding: 10px 0 0 0;  /* 上部余白を極限までカット */
+            margin-bottom: 35px;
+            padding: 10px 0 0 0;
         }
 
         .logo {
-            font-size: 3.2rem; /* 見出しを少し大きく調整 */
+            font-size: 3.2rem;
             font-weight: 700;
             letter-spacing: -1px;
-            margin-bottom: 15px; /* マージンを詰める */
+            margin-bottom: 15px;
             background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -219,7 +219,7 @@
         /* --- メインレイアウト (iPad特化型 3列固定システム) --- */
         .main-layout {
             display: grid;
-            grid-template-columns: 2fr 1fr; /* リンク集エリア(2) : サイドバー(1) */
+            grid-template-columns: 2fr 1fr;
             gap: 24px;
             align-items: flex-start;
         }
@@ -227,7 +227,7 @@
         /* 左側：リンク集を2列で綺麗に固定 */
         .links-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 確実に2列に並べる */
+            grid-template-columns: repeat(2, 1fr);
             gap: 24px;
         }
 
@@ -245,7 +245,7 @@
             border-radius: 16px;
             padding: 24px;
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px); /* Safari対応 */
+            -webkit-backdrop-filter: blur(12px);
             transition: all 0.3s ease;
         }
 
@@ -262,8 +262,9 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
         }
 
+        /* カテゴリ見出しのフォントサイズを少し大きく調整 */
         .card-title {
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             font-weight: 600;
             margin-bottom: 16px;
             color: var(--accent-color);
@@ -277,17 +278,18 @@
         }
 
         .link-item {
-            margin-bottom: 12px;
+            margin-bottom: 14px; /* 文字拡大に伴い、アイテム間の余白も少し拡張 */
         }
 
         .link-item:last-child {
             margin-bottom: 0;
         }
 
+        /* リンク文字のフォントサイズを少し大きく調整 */
         .link-item a {
             color: var(--text-muted);
             text-decoration: none;
-            font-size: 0.95rem;
+            font-size: 1.1rem;
             transition: color 0.2s ease, padding-left 0.2s ease;
             display: inline-block;
         }
@@ -452,18 +454,18 @@
             text-align: center;
         }
 
-        /* 縦向き画面（iPad Portraitスタイル）の時のみ縦並びに崩すレスポンシブコード */
+        /* 縦向き画面のレスポンシブコード */
         @media (max-width: 768px) {
             .main-layout {
                 grid-template-columns: 1fr;
             }
             .links-grid {
-                grid-template-columns: repeat(2, 1fr); /* 縦画面でも2列を維持 */
+                grid-template-columns: repeat(2, 1fr);
             }
         }
         @media (max-width: 480px) {
             .links-grid {
-                grid-template-columns: 1fr; /* スマホ幅の時のみ完全1列 */
+                grid-template-columns: 1fr;
             }
             .logo { font-size: 2.2rem; }
         }
@@ -472,12 +474,14 @@
 <body data-theme="dark">
 
     <div class="container">
+        <!-- テーマ切り替えトグルスイッチ -->
         <div class="theme-switch-container">
             <button class="theme-toggle-btn" id="themeToggle" aria-label="テーマ切り替え">
                 <div class="theme-toggle-circle"></div>
             </button>
         </div>
 
+        <!-- Google検索セクション -->
         <header>
             <div class="logo">PORTAL</div>
             <div class="search-container">
@@ -487,15 +491,19 @@
                 </form>
             </div>
             
+            <!-- ランダム名言・格言表示エリア -->
             <div class="quote-container">
                 <p class="quote-text" id="quoteDisplay" title="クリックで別の名言に変更します"></p>
             </div>
         </header>
 
+        <!-- メインレイアウト -->
         <div class="main-layout">
             
+            <!-- 左側：リンク集（均等に2列を形成、文字サイズ拡大済み） -->
             <main class="links-grid">
                 
+                <!-- Category 1 -->
                 <div class="category-card">
                     <h2 class="card-title">Search & Tech</h2>
                     <ul class="link-list">
@@ -506,6 +514,7 @@
                     </ul>
                 </div>
 
+                <!-- Category 2 -->
                 <div class="category-card">
                     <h2 class="card-title">News & Media</h2>
                     <ul class="link-list">
@@ -515,6 +524,7 @@
                     </ul>
                 </div>
 
+                <!-- Category 3 -->
                 <div class="category-card">
                     <h2 class="card-title">Social & Ent.</h2>
                     <ul class="link-list">
@@ -524,6 +534,7 @@
                     </ul>
                 </div>
 
+                <!-- Category 4 -->
                 <div class="category-card">
                     <h2 class="card-title">Tools & Services</h2>
                     <ul class="link-list">
@@ -535,8 +546,10 @@
 
             </main>
 
+            <!-- 右側：サイドバーエリア（1列分を確保） -->
             <aside class="sidebar-area">
 
+                <!-- デジタルクロックカード -->
                 <div class="sidebar-card">
                     <div class="clock-container">
                         <div class="clock-time" id="clockTime">00:00:00</div>
@@ -544,6 +557,7 @@
                     </div>
                 </div>
                 
+                <!-- カレンダーカード -->
                 <div class="sidebar-card">
                     <div class="calendar-header-container">
                         <button class="cal-btn" id="prevMonthBtn" title="前の月へ">◀</button>
@@ -561,6 +575,7 @@
                     </div>
                 </div>
 
+                <!-- Year Progress カード -->
                 <div class="sidebar-card">
                     <div class="progress-meta">
                         <span id="progressYearText">2026 Progress</span>
@@ -571,6 +586,7 @@
                     </div>
                 </div>
 
+                <!-- 一言ガラスメモカード -->
                 <div class="sidebar-card">
                     <h2 class="card-title" style="margin-bottom: 12px;">Quick Memo</h2>
                     <textarea class="memo-textarea" id="quickMemo" placeholder="ここにメモを残せます（自動保存されます）..."></textarea>
@@ -626,7 +642,7 @@
         // --- ジャンル限定ランダム名言・格言データベース ---
         const quotesDb = [
             { text: "「ソフトウェアがいかに複雑であっても、それは最終的には単純なものの組み合わせに過ぎない。」", category: "Tech" },
-            { text: "「未来を予測する最善の方法は、それを発明することだ。」 — アラン・ケイ", category: "Tech" },
+            { text: "「未来を予測する最善の方法は、それを发明することだ。」 — アラン・ケイ", category: "Tech" },
             { text: "「完璧が達成されるのは、何も加えるものがなくなった時ではなく、何も削るものがなくなった時だ。」 — アントワーヌ・ド・サン＝テグジュペリ", category: "Tech" },
             { text: "「Talk is cheap. Show me the code. (口舌は安っぽい。コードを見せろ。)」 — リーナス・トーバルズ", category: "Tech" },
             { text: "「僕と契約して、魔法少女になってよ！」 — キゥべえ (魔法少女まどか☆マギカ)", category: "Anime" },
