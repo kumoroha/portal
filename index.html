@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Minimal Portal</title>
+    <style>
+        /* --- デザインシステム & 変数 --- */
+        :root {
+            /* ライトテーマ変数 */
+            --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+            --card-bg: rgba(255, 255, 255, 0.65);
+            --card-border: #cbd5e1;
+            --card-hover-border: #94a3b8;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --search-bg: #ffffff;
+            --search-border: #94a3b8;
+            --search-focus-border: #3b82f6;
+            --search-focus-glow: rgba(59, 130, 246, 0.15);
+            --accent-color: #2563eb;
+            --accent-gradient: linear-gradient(to right, #2563eb, #3b82f6, #06b6d4);
+            --toggle-bg: #cbd5e1;
+            --cal-today-bg: #2563eb;
+            --cal-today-text: #ffffff;
+            --bar-bg: #e2e8f0;
+        }
+
+        [data-theme="dark"] {
+            /* ダークテーマ変数 */
+            --bg-gradient: linear-gradient(135deg, #070b12 0%, #111324 50%, #16122c 100%);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --card-hover-border: rgba(99, 102, 241, 0.5);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --search-bg: rgba(15, 23, 42, 0.6);
+            --search-border: rgba(255, 255, 255, 0.2);
+            --search-focus-border: #6366f1;
+            --search-focus-glow: rgba(99, 102, 241, 0.25);
+            --accent-color: #a5b4fc;
+            --accent-gradient: linear-gradient(to right, #6366f1, #a855f7, #ec4899);
+            --toggle-bg: #334155;
+            --cal-today-bg: #6366f1;
+            --cal-today-text: #ffffff;
+            --bar-bg: rgba(255, 255, 255, 0.07);
+        }
+
+        /* --- 基本スタイル --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background: var(--bg-gradient);
+            background-size: 200% 200%;
+            animation: gradientMove 15s ease infinite;
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            position: relative;
+        }
+
+        /* --- テーマ切り替えスイッチ --- */
+        .theme-switch-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .theme-toggle-btn {
+            background: var(--toggle-bg);
+            border: none;
+            width: 48px;
+            height: 26px;
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 0 4px;
+            transition: background 0.3s ease;
+        }
+
+        .theme-toggle-circle {
+            width: 18px;
+            height: 18px;
+            background: #ffffff;
+            border-radius: 50%;
+            position: absolute;
+            left: 4px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        [data-theme="dark"] .theme-toggle-circle {
+            transform: translateX(22px);
+            background: #1e1b4b;
+        }
+
+        /* --- ヘッダー / Google 検索セクション --- */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 25px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .search-container {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            background: var(--search-bg);
+            border: 2px solid var(--search-border);
+            border-radius: 30px;
+            padding: 4px 6px 4px 24px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-form:focus-within {
+            border-color: var(--search-focus-border);
+            box-shadow: 0 0 20px var(--search-focus-glow), 0 4px 15px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-main);
+            font-size: 1.05rem;
+            height: 44px;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+
+        .search-button {
+            background: var(--accent-gradient);
+            border: none;
+            color: white;
+            padding: 0 24px;
+            height: 44px;
+            border-radius: 22px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .search-button:hover {
+            opacity: 0.9;
+        }
+
+        /* --- 3. ランダム名言・格言用スタイル --- */
+        .quote-container {
+            margin-top: 20px;
+            min-height: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quote-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: color 0.3s ease, opacity 0.3s ease;
+            max-width: 600px;
+            line-height: 1.4;
+            opacity: 1;
+        }
+
+        .quote-text:hover {
+            color: var(--text-main);
+        }
+
+        /* --- メインレイアウト (Flexbox) --- */
+        .main-layout {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+        }
+
+        /* 左側：リンク集用のグリッド */
+        .links-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        /* 右側：サイドバーエリア */
+        .sidebar-area {
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            flex-shrink: 0;
+        }
+
+        /* カードの共通デザイン */
+        .category-card, .sidebar-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover, .sidebar-card:hover {
+            border-color: var(--card-hover-border);
+            transform: translateY(-4px);
+        }
+
+        [data-theme="dark"] .category-card:hover, [data-theme="dark"] .sidebar-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.05);
+        }
+
+        [data-theme="light"] .category-card:hover, [data-theme="light"] .sidebar-card:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 8px;
+        }
+
+        /* リンクアイテム */
+        .link-list {
+            list-style: none;
+        }
+
+        .link-item {
+            margin-bottom: 12px;
+        }
+
+        .link-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .link-item a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s ease, padding-left 0.2s ease;
+            display: inline-block;
+        }
+
+        .link-item a:hover {
+            color: var(--text-main);
+            padding-left: 4px;
+        }
+
+        /* --- デジタルクロックスタイル --- */
+        .clock-container {
+            text-align: center;
+            padding: 4px 0;
+        }
+        .clock-time {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .clock-date {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            letter-spacing: 1px;
+        }
+
+        /* --- カレンダー詳細 & 4. 月切り替えボタン機能スタイル --- */
+        .calendar-header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding: 0 8px;
+        }
+
+        /* 切り替え矢印ボタンの共通スタイル */
+        .cal-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .cal-btn:hover {
+            color: var(--text-main);
+            background: var(--bar-bg);
+        }
+
+        .calendar-link {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            color: var(--text-main);
+            text-decoration: none;
+            display: inline-block;
+            transition: color 0.2s ease;
+        }
+
+        .calendar-link:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .weekday {
+            font-weight: 600;
+            color: var(--text-muted);
+            padding-bottom: 4px;
+        }
+
+        .weekday:nth-child(7) { color: #3b82f6; } 
+        .weekday:nth-child(1) { color: #ef4444; } 
+
+        .day {
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: var(--text-main);
+        }
+
+        .day.empty {
+            cursor: default;
+        }
+
+        .day.today {
+            background: var(--cal-today-bg);
+            color: var(--cal-today-text) !important;
+            font-weight: 700;
+            box-shadow: 0 2px 8px var(--search-focus-glow);
+        }
+
+        /* --- Year Progress バースタイル --- */
+        .progress-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .progress-bar-container {
+            background: var(--bar-bg);
+            border-radius: 6px;
+            height: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent-gradient);
+            width: 0%;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 6px;
+        }
+
+        /* --- 一言ガラスメモスタイル --- */
+        .memo-textarea {
+            width: 100%;
+            height: 90px;
+            background: transparent;
+            border: 1px solid var(--search-border);
+            border-radius: 10px;
+            padding: 12px;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+        .memo-textarea:focus {
+            border-color: var(--search-focus-border);
+        }
+        .memo-textarea::placeholder {
+            color: var(--text-muted);
+            opacity: 0.4;
+        }
+
+        /* --- フッター --- */
+        footer {
+            margin-top: auto;
+            padding-top: 60px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            opacity: 0.6;
+            text-align: center;
+        }
+
+        /* --- レスポンシブ対応 --- */
+        @media (max-width: 900px) {
+            .main-layout {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .sidebar-area {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 20px 16px; }
+            .theme-switch-container { top: -10px; right: 4px; }
+            header { margin-bottom: 40px; }
+            .logo { font-size: 2rem; }
+            .search-form { padding: 4px 6px 4px 18px; }
+            .search-input { font-size: 0.95rem; height: 38px; }
+            .search-button { padding: 0 16px; height: 38px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+    <div class="container">
+        <div class="theme-switch-container">
+            <button class="theme-toggle-btn" id="themeToggle" aria-label="テーマ切り替え">
+                <div class="theme-toggle-circle"></div>
+            </button>
+        </div>
+
+        <header>
+            <div class="logo">PORTAL</div>
+            <div class="search-container">
+                <form action="https://www.google.com/search" method="get" target="_blank" class="search-form" id="searchForm">
+                    <input type="text" name="q" class="search-input" placeholder="Google 検索、または URL を入力..." autocomplete="off" autofocus>
+                    <button type="submit" class="search-button">検索</button>
+                </form>
+            </div>
+            
+            <div class="quote-container">
+                <p class="quote-text" id="quoteDisplay" title="クリックで別の名言に変更します"></p>
+            </div>
+        </header>
+
+        <div class="main-layout">
+            
+            <main class="links-grid">
+                
+                <div class="category-card">
+                    <h2 class="card-title">Search & Tech</h2>
+                    <ul class="link-list">
+                        <li class="link-item"><a href="https://www.google.com" target="_blank">Google</a></li>
+                        <li class="link-item"><a href="https://github.com" target="_blank">GitHub</a></li>
+                        <li class="link-item"><a href="https://qiita.com" target="_blank">Qiita</a></li>
+                        <li class="link-item"><a href="https://zenn.dev" target="_blank">Zenn</a></li>
+                    </ul>
+                </div>
+
+                <div class="category-card">
+                    <h2 class="card-title">News & Media</h2>
+                    <ul class="link-list">
+                        <li class="link-item"><a href="https://news.yahoo.co.jp" target="_blank">Yahoo!ニュース</a></li>
+                        <li class="link-item"><a href="https://www.nikkei.com" target="_blank">日本経済新聞</a></li>
+                        <li class="link-item"><a href="https://b.hatena.ne.jp" target="_blank">はてなブックマーク</a></li>
+                    </ul>
+                </div>
+
+                <div class="category-card">
+                    <h2 class="card-title">Social & Ent.</h2>
+                    <ul class="link-list">
+                        <li class="link-item"><a href="https://x.com" target="_blank">X (Twitter)</a></li>
+                        <li class="link-item"><a href="https://www.youtube.com" target="_blank">YouTube</a></li>
+                        <li class="link-item"><a href="https://www.nicovideo.jp" target="_blank">ニコニコ動画</a></li>
+                    </ul>
+                </div>
+
+                <div class="category-card">
+                    <h2 class="card-title">Tools & Services</h2>
+                    <ul class="link-list">
+                        <li class="link-item"><a href="https://www.amazon.co.jp" target="_blank">Amazon</a></li>
+                        <li class="link-item"><a href="https://www.wikipedia.org" target="_blank">Wikipedia</a></li>
+                        <li class="link-item"><a href="https://map.google.co.jp" target="_blank">Google マップ</a></li>
+                    </ul>
+                </div>
+
+            </main>
+
+            <aside class="sidebar-area">
+
+                <div class="sidebar-card">
+                    <div class="clock-container">
+                        <div class="clock-time" id="clockTime">00:00:00</div>
+                        <div class="clock-date" id="clockDate">----/--/-- ( - )</div>
+                    </div>
+                </div>
+                
+                <div class="sidebar-card">
+                    <div class="calendar-header-container">
+                        <button class="cal-btn" id="prevMonthBtn" title="前の月へ">◀</button>
+                        <a href="https://calendar.google.com" target="_blank" class="calendar-link" id="calendarLink" title="クリックで当月へリセット / 新規タブでGoogleカレンダーを起動">2026年 05月</a>
+                        <button class="cal-btn" id="nextMonthBtn" title="次の月へ">▶</button>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid">
+                        <div class="weekday">日</div>
+                        <div class="weekday">月</div>
+                        <div class="weekday">火</div>
+                        <div class="weekday">水</div>
+                        <div class="weekday">木</div>
+                        <div class="weekday">金</div>
+                        <div class="weekday">土</div>
+                    </div>
+                </div>
+
+                <div class="sidebar-card">
+                    <div class="progress-meta">
+                        <span id="progressYearText">2026 Progress</span>
+                        <span id="progressPercent">0.00%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="progressBarFill"></div>
+                    </div>
+                </div>
+
+                <div class="sidebar-card">
+                    <h2 class="card-title" style="margin-bottom: 12px;">Quick Memo</h2>
+                    <textarea class="memo-textarea" id="quickMemo" placeholder="ここにメモを残せます（自動保存されます）..."></textarea>
+                </div>
+
+            </aside>
+
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Minimal Portal Dashboard
+    </footer>
+
+    <script>
+        // --- テーマ切り替えのロジック ---
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        body.setAttribute('data-theme', savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            let newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // --- スマート検索＆URL直接判定ロジック ---
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            const input = this.querySelector('.search-input');
+            const query = input.value.trim();
+
+            if (!query) {
+                e.preventDefault();
+                return;
+            }
+
+            const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/i;
+
+            if (urlPattern.test(query)) {
+                e.preventDefault();
+                let targetUrl = query;
+                if (!/^https?:\/\//i.test(query)) {
+                    targetUrl = 'https://' + query;
+                }
+                window.open(targetUrl, '_blank');
+                input.value = '';
+            }
+        });
+
+        // --- 3. ジャンル限定ランダム名言・格言データベース & ロジック ---
+        const quotesDb = [
+            // パソコン・IT・コーディング系
+            { text: "「ソフトウェアがいかに複雑であっても、それは最終的には単純なものの組み合わせに過ぎない。」", category: "Tech" },
+            { text: "「未来を予測する最善の方法は、それを発明することだ。」 — アラン・ケイ", category: "Tech" },
+            { text: "「完璧が達成されるのは、何も加えるものがなくなった時ではなく、何も削るものがなくなった時だ。」 — アントワーヌ・ド・サン＝テグジュペリ (ミニマリズムの極意)", category: "Tech" },
+            { text: "「Talk is cheap. Show me the code. (口舌は安っぽい。コードを見せろ。)」 — リーナス・トーバルズ", category: "Tech" },
+            
+            // ご主人様のお気に入りアニメ作品系
+            { text: "「僕と契約して、魔法少女になってよ！」 — キュゥべえ (魔法少女まどか☆マギカ)", category: "Anime" },
+            { text: "「たとえ君が忘れていても、俺は君を忘れない。君が絶望に陥るとき、俺が必ず、君を救い出す。」 — ナツキ・スバル (Re:ゼロから始める異世界生活)", category: "Anime" },
+            { text: "「やりたいことを最優先！それがリコリスでしょ！」 — 錦木千束 (リコリス・リコイル)", category: "Anime" },
+            { text: "「И на твоей улице будет праздник. (君の街の通りにも、いつか祭りが来るさ。＝きっといいことがある。)」 — アリサ・ミハイロヴナ・九条 (時々ボソッとロシア語でデレる隣のアーリャさん)", category: "Anime" },
+            
+            // 軍事・戦略・歴史系
+            { text: "「状況？何が状況だ。状況は私が作るのだ。」 — ナポレオン・ボナパルト", category: "Military" },
+            { text: "「何が起きようとも、我々にはマキシム機関銃がある。そして、彼らには無い。」 — ヒレア・ベロック", category: "Military" },
+            { text: "「作戦計画は、敵と接触した瞬間に大抵使い物にならなくなる。しかし、計画を立てるプロセスそのものが不可欠なのだ。」 — ヘルムート・フォン・モルトケ", category: "Military" },
+            { text: "「最も優れた戦術とは、戦わずして敵を屈服させることである。」 — 孫子", category: "Military" }
+        ];
+
+        function displayRandomQuote() {
+            const quoteDisplay = document.getElementById('quoteDisplay');
+            
+            // フェードアウトさせてからテキストを入れ替えてフェードイン
+            quoteDisplay.style.opacity = 0;
+            
+            setTimeout(() => {
+                const randomIndex = Math.floor(Math.random() * quotesDb.length);
+                quoteDisplay.innerText = quotesDb[randomIndex].text;
+                quoteDisplay.style.opacity = 1;
+            }, 250);
+        }
+        
+        // 初回表示と、クリック時の切り替えイベント
+        document.getElementById('quoteDisplay').addEventListener('click', displayRandomQuote);
+        displayRandomQuote();
+
+        // --- リアルタイムデジタルクロックの更新ロジック ---
+        function updateClock() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const date = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).getSeconds ? String(now.getSeconds()).padStart(2, '0') : String(now.getSeconds()).padStart(2, '0');
+            
+            const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+            const dayOfWeek = weekdays[now.getDay()];
+
+            document.getElementById('clockTime').innerText = `${hours}:${minutes}:${seconds}`;
+            document.getElementById('clockDate').innerText = `${year}/${month}/${date} (${dayOfWeek})`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // --- 4. 動的カレンダー生成 & 前後月切り替えロジック ---
+        // 表示中のカレンダーの「年」と「月」を管理するステート変数
+        const currentCalendarDate = new Date(); 
+
+        function generateCalendar() {
+            const now = new Date(); // 今日の日付（ハイライト判定用）
+            const targetYear = currentCalendarDate.getFullYear();
+            const targetMonth = currentCalendarDate.getMonth(); // 0-11
+
+            // ヘッダーのテキスト更新
+            const displayMonth = String(targetMonth + 1).padStart(2, '0');
+            document.getElementById('calendarLink').innerText = `${targetYear}年 ${displayMonth}月`;
+
+            const calendarGrid = document.getElementById('calendarGrid');
+            
+            // 既存の日付要素（dayクラスを持つもの）をすべて削除して初期化
+            const existingDays = calendarGrid.querySelectorAll('.day');
+            existingDays.forEach(day => day.remove());
+
+            // 1日の曜日と、当月の総日数を取得
+            const firstDayIndex = new Date(targetYear, targetMonth, 1).getDay(); 
+            const lastDate = new Date(targetYear, targetMonth + 1, 0).getDate(); 
+
+            // 空白セルを挿入
+            for (let i = 0; i < firstDayIndex; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.classList.add('day', 'empty');
+                calendarGrid.appendChild(emptyCell);
+            }
+
+            // 日付セルを挿入
+            for (let date = 1; date <= lastDate; date++) {
+                const dayCell = document.createElement('div');
+                dayCell.classList.add('day');
+                dayCell.innerText = date;
+
+                // 「実際に今日である日付」かつ「表示している年・月が当月である」場合のみハイライト
+                if (date === now.getDate() && targetMonth === now.getMonth() && targetYear === now.getFullYear()) {
+                    dayCell.classList.add('today');
+                }
+
+                calendarGrid.appendChild(dayCell);
+            }
+        }
+
+        // 月切り替えボタンのイベントリスナー
+        document.getElementById('prevMonthBtn').addEventListener('click', () => {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+            generateCalendar();
+        });
+
+        document.getElementById('nextMonthBtn').addEventListener('click', () => {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+            generateCalendar();
+        });
+
+        // 年月をクリックした場合はGoogleカレンダーを別窓で開く仕様を維持しつつ、ポータル上は当月表示に一瞬でリセット
+        document.getElementById('calendarLink').addEventListener('click', function(e) {
+            currentCalendarDate.setTime(new Date().getTime()); // 現在時刻にリセット
+            generateCalendar();
+            // 注意: <a>タグの本来の挙動(target="_blank"でのGoogleカレンダー遷移)はそのまま実行されます
+        });
+
+        generateCalendar();
+
+        // --- Year Progress（今年の経過率）の計算ロジック ---
+        function calculateYearProgress() {
+            const now = new Date();
+            const year = now.getFullYear();
+            
+            const startOfYear = new Date(year, 0, 1);
+            const endOfYear = new Date(year + 1, 0, 1);
+            
+            const progress = (now - startOfYear) / (endOfYear - startOfYear);
+            const percentage = (progress * 100).toFixed(2);
+            
+            document.getElementById('progressYearText').innerText = `${year} Progress`;
+            document.getElementById('progressPercent').innerText = `${percentage}%`;
+            document.getElementById('progressBarFill').style.width = `${percentage}%`;
+        }
+        calculateYearProgress();
+        setInterval(calculateYearProgress, 3600000);
+
+        // --- 一言ガラスメモ（localStorage自動保存）ロジック ---
+        const memoTextarea = document.getElementById('quickMemo');
+        memoTextarea.value = localStorage.getItem('portal_quick_memo') || '';
+        memoTextarea.addEventListener('input', () => {
+            localStorage.setItem('portal_quick_memo', memoTextarea.value);
+        });
+    </script>
+</body>
+</html>
