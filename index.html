@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Minimal Portal</title>
+    <title>Ultimate Minimal Portal for iPad</title>
     <style>
         /* --- デザインシステム & 変数 --- */
         :root {
@@ -60,7 +60,7 @@
             animation: gradientMove 15s ease infinite;
             color: var(--text-main);
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 10px 20px 40px 20px; /* 上部のマージンをほぼ無くす（詰め） */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -75,14 +75,14 @@
 
         .container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1240px; /* iPadの横幅にゆとりを持たせるサイズ */
             position: relative;
         }
 
         /* --- テーマ切り替えスイッチ --- */
         .theme-switch-container {
             position: absolute;
-            top: 0;
+            top: 10px;
             right: 0;
             display: flex;
             align-items: center;
@@ -122,15 +122,15 @@
         /* --- ヘッダー / Google 検索セクション --- */
         header {
             text-align: center;
-            margin-bottom: 50px;
-            padding: 20px 0;
+            margin-bottom: 35px; /* 下部マージンもややタイトに */
+            padding: 10px 0 0 0;  /* 上部余白を極限までカット */
         }
 
         .logo {
-            font-size: 2.5rem;
+            font-size: 3.2rem; /* 見出しを少し大きく調整 */
             font-weight: 700;
             letter-spacing: -1px;
-            margin-bottom: 25px;
+            margin-bottom: 15px; /* マージンを詰める */
             background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -191,9 +191,9 @@
             opacity: 0.9;
         }
 
-        /* --- 3. ランダム名言・格言用スタイル --- */
+        /* --- ランダム名言・格言用スタイル --- */
         .quote-container {
-            margin-top: 20px;
+            margin-top: 12px;
             min-height: 24px;
             display: flex;
             justify-content: center;
@@ -216,28 +216,26 @@
             color: var(--text-main);
         }
 
-        /* --- メインレイアウト (Flexbox) --- */
+        /* --- メインレイアウト (iPad特化型 3列固定システム) --- */
         .main-layout {
-            display: flex;
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* リンク集エリア(2) : サイドバー(1) */
             gap: 24px;
             align-items: flex-start;
         }
 
-        /* 左側：リンク集用のグリッド */
+        /* 左側：リンク集を2列で綺麗に固定 */
         .links-grid {
-            flex: 1;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            grid-template-columns: repeat(2, 1fr); /* 確実に2列に並べる */
             gap: 24px;
         }
 
-        /* 右側：サイドバーエリア */
+        /* 右側：サイドバーエリア (カレンダー等) */
         .sidebar-area {
-            width: 320px;
             display: flex;
             flex-direction: column;
             gap: 24px;
-            flex-shrink: 0;
         }
 
         /* カードの共通デザイン */
@@ -247,6 +245,7 @@
             border-radius: 16px;
             padding: 24px;
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px); /* Safari対応 */
             transition: all 0.3s ease;
         }
 
@@ -319,7 +318,7 @@
             letter-spacing: 1px;
         }
 
-        /* --- カレンダー詳細 & 4. 月切り替えボタン機能スタイル --- */
+        /* --- カレンダー詳細スタイル --- */
         .calendar-header-container {
             display: flex;
             align-items: center;
@@ -328,7 +327,6 @@
             padding: 0 8px;
         }
 
-        /* 切り替え矢印ボタンの共通スタイル */
         .cal-btn {
             background: transparent;
             border: none;
@@ -447,32 +445,27 @@
         /* --- フッター --- */
         footer {
             margin-top: auto;
-            padding-top: 60px;
+            padding-top: 40px;
             font-size: 0.85rem;
             color: var(--text-muted);
             opacity: 0.6;
             text-align: center;
         }
 
-        /* --- レスポンシブ対応 --- */
-        @media (max-width: 900px) {
+        /* 縦向き画面（iPad Portraitスタイル）の時のみ縦並びに崩すレスポンシブコード */
+        @media (max-width: 768px) {
             .main-layout {
-                flex-direction: column;
-                align-items: stretch;
+                grid-template-columns: 1fr;
             }
-            .sidebar-area {
-                width: 100%;
+            .links-grid {
+                grid-template-columns: repeat(2, 1fr); /* 縦画面でも2列を維持 */
             }
         }
-
-        @media (max-width: 600px) {
-            body { padding: 20px 16px; }
-            .theme-switch-container { top: -10px; right: 4px; }
-            header { margin-bottom: 40px; }
-            .logo { font-size: 2rem; }
-            .search-form { padding: 4px 6px 4px 18px; }
-            .search-input { font-size: 0.95rem; height: 38px; }
-            .search-button { padding: 0 16px; height: 38px; font-size: 0.85rem; }
+        @media (max-width: 480px) {
+            .links-grid {
+                grid-template-columns: 1fr; /* スマホ幅の時のみ完全1列 */
+            }
+            .logo { font-size: 2.2rem; }
         }
     </style>
 </head>
@@ -630,33 +623,25 @@
             }
         });
 
-        // --- 3. ジャンル限定ランダム名言・格言データベース & ロジック ---
+        // --- ジャンル限定ランダム名言・格言データベース ---
         const quotesDb = [
-            // パソコン・IT・コーディング系
             { text: "「ソフトウェアがいかに複雑であっても、それは最終的には単純なものの組み合わせに過ぎない。」", category: "Tech" },
             { text: "「未来を予測する最善の方法は、それを発明することだ。」 — アラン・ケイ", category: "Tech" },
-            { text: "「完璧が達成されるのは、何も加えるものがなくなった時ではなく、何も削るものがなくなった時だ。」 — アントワーヌ・ド・サン＝テグジュペリ (ミニマリズムの極意)", category: "Tech" },
+            { text: "「完璧が達成されるのは、何も加えるものがなくなった時ではなく、何も削るものがなくなった時だ。」 — アントワーヌ・ド・サン＝テグジュペリ", category: "Tech" },
             { text: "「Talk is cheap. Show me the code. (口舌は安っぽい。コードを見せろ。)」 — リーナス・トーバルズ", category: "Tech" },
-            
-            // ご主人様のお気に入りアニメ作品系
-            { text: "「僕と契約して、魔法少女になってよ！」 — キュゥべえ (魔法少女まどか☆マギカ)", category: "Anime" },
+            { text: "「僕と契約して、魔法少女になってよ！」 — キゥべえ (魔法少女まどか☆マギカ)", category: "Anime" },
             { text: "「たとえ君が忘れていても、俺は君を忘れない。君が絶望に陥るとき、俺が必ず、君を救い出す。」 — ナツキ・スバル (Re:ゼロから始める異世界生活)", category: "Anime" },
             { text: "「やりたいことを最優先！それがリコリスでしょ！」 — 錦木千束 (リコリス・リコイル)", category: "Anime" },
-            { text: "「И на твоей улице будет праздник. (君の街の通りにも、いつか祭りが来るさ。＝きっといいことがある。)」 — アリサ・ミハイロヴナ・九条 (時々ボソッとロシア語でデレる隣のアーリャさん)", category: "Anime" },
-            
-            // 軍事・戦略・歴史系
+            { text: "「И на твоей улице будет праздник. (君の街の通りにも、いつか祭りが来るさ。)」 — アリサ・ミハイロヴナ・九条 (時々ボソッとロシア語でデレる隣のアーリャさん)", category: "Anime" },
             { text: "「状況？何が状況だ。状況は私が作るのだ。」 — ナポレオン・ボナパルト", category: "Military" },
             { text: "「何が起きようとも、我々にはマキシム機関銃がある。そして、彼らには無い。」 — ヒレア・ベロック", category: "Military" },
             { text: "「作戦計画は、敵と接触した瞬間に大抵使い物にならなくなる。しかし、計画を立てるプロセスそのものが不可欠なのだ。」 — ヘルムート・フォン・モルトケ", category: "Military" },
-            { text: "「最も優れた戦術とは、戦わずして敵を屈服させることである。」 — 孫子", category: "Military" }
+            { text: "「最も優れた戦術とは、戦わずして敵を屈服させることである。」 — 孫子" }
         ];
 
         function displayRandomQuote() {
             const quoteDisplay = document.getElementById('quoteDisplay');
-            
-            // フェードアウトさせてからテキストを入れ替えてフェードイン
             quoteDisplay.style.opacity = 0;
-            
             setTimeout(() => {
                 const randomIndex = Math.floor(Math.random() * quotesDb.length);
                 quoteDisplay.innerText = quotesDb[randomIndex].text;
@@ -664,11 +649,10 @@
             }, 250);
         }
         
-        // 初回表示と、クリック時の切り替えイベント
         document.getElementById('quoteDisplay').addEventListener('click', displayRandomQuote);
         displayRandomQuote();
 
-        // --- リアルタイムデジタルクロックの更新ロジック ---
+        // --- リアルタイムデジタルクロック ---
         function updateClock() {
             const now = new Date();
             const year = now.getFullYear();
@@ -676,7 +660,7 @@
             const date = String(now.getDate()).padStart(2, '0');
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).getSeconds ? String(now.getSeconds()).padStart(2, '0') : String(now.getSeconds()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
             
             const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
             const dayOfWeek = weekdays[now.getDay()];
@@ -687,43 +671,35 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // --- 4. 動的カレンダー生成 & 前後月切り替えロジック ---
-        // 表示中のカレンダーの「年」と「月」を管理するステート変数
+        // --- 動的カレンダー生成 & 前後月切り替え ---
         const currentCalendarDate = new Date(); 
 
         function generateCalendar() {
-            const now = new Date(); // 今日の日付（ハイライト判定用）
+            const now = new Date();
             const targetYear = currentCalendarDate.getFullYear();
-            const targetMonth = currentCalendarDate.getMonth(); // 0-11
+            const targetMonth = currentCalendarDate.getMonth();
 
-            // ヘッダーのテキスト更新
             const displayMonth = String(targetMonth + 1).padStart(2, '0');
             document.getElementById('calendarLink').innerText = `${targetYear}年 ${displayMonth}月`;
 
             const calendarGrid = document.getElementById('calendarGrid');
-            
-            // 既存の日付要素（dayクラスを持つもの）をすべて削除して初期化
             const existingDays = calendarGrid.querySelectorAll('.day');
             existingDays.forEach(day => day.remove());
 
-            // 1日の曜日と、当月の総日数を取得
             const firstDayIndex = new Date(targetYear, targetMonth, 1).getDay(); 
             const lastDate = new Date(targetYear, targetMonth + 1, 0).getDate(); 
 
-            // 空白セルを挿入
             for (let i = 0; i < firstDayIndex; i++) {
                 const emptyCell = document.createElement('div');
                 emptyCell.classList.add('day', 'empty');
                 calendarGrid.appendChild(emptyCell);
             }
 
-            // 日付セルを挿入
             for (let date = 1; date <= lastDate; date++) {
                 const dayCell = document.createElement('div');
                 dayCell.classList.add('day');
                 dayCell.innerText = date;
 
-                // 「実際に今日である日付」かつ「表示している年・月が当月である」場合のみハイライト
                 if (date === now.getDate() && targetMonth === now.getMonth() && targetYear === now.getFullYear()) {
                     dayCell.classList.add('today');
                 }
@@ -732,7 +708,6 @@
             }
         }
 
-        // 月切り替えボタンのイベントリスナー
         document.getElementById('prevMonthBtn').addEventListener('click', () => {
             currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
             generateCalendar();
@@ -743,16 +718,14 @@
             generateCalendar();
         });
 
-        // 年月をクリックした場合はGoogleカレンダーを別窓で開く仕様を維持しつつ、ポータル上は当月表示に一瞬でリセット
         document.getElementById('calendarLink').addEventListener('click', function(e) {
-            currentCalendarDate.setTime(new Date().getTime()); // 現在時刻にリセット
+            currentCalendarDate.setTime(new Date().getTime());
             generateCalendar();
-            // 注意: <a>タグの本来の挙動(target="_blank"でのGoogleカレンダー遷移)はそのまま実行されます
         });
 
         generateCalendar();
 
-        // --- Year Progress（今年の経過率）の計算ロジック ---
+        // --- Year Progress ---
         function calculateYearProgress() {
             const now = new Date();
             const year = now.getFullYear();
@@ -770,7 +743,7 @@
         calculateYearProgress();
         setInterval(calculateYearProgress, 3600000);
 
-        // --- 一言ガラスメモ（localStorage自動保存）ロジック ---
+        // --- 一言ガラスメモ ---
         const memoTextarea = document.getElementById('quickMemo');
         memoTextarea.value = localStorage.getItem('portal_quick_memo') || '';
         memoTextarea.addEventListener('input', () => {
