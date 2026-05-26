@@ -24,6 +24,11 @@
             --cal-today-bg: #2563eb;
             --cal-today-text: #ffffff;
             --bar-bg: #e2e8f0;
+            
+            /* ボタン用追加変数 */
+            --btn-active-bg: #ffffff;
+            --btn-active-text: #0f172a;
+            --btn-inactive-text: #64748b;
         }
 
         [data-theme="dark"] {
@@ -40,10 +45,15 @@
             --search-focus-glow: rgba(99, 102, 241, 0.25);
             --accent-color: #a5b4fc;
             --accent-gradient: linear-gradient(to right, #6366f1, #a855f7, #ec4899);
-            --toggle-bg: #334155;
+            --toggle-bg: #1e293b;
             --cal-today-bg: #6366f1;
             --cal-today-text: #ffffff;
             --bar-bg: rgba(255, 255, 255, 0.07);
+            
+            /* ボタン用追加変数 */
+            --btn-active-bg: #334155;
+            --btn-active-text: #f8fafc;
+            --btn-inactive-text: #94a3b8;
         }
 
         /* --- 基本スタイル --- */
@@ -79,7 +89,7 @@
             position: relative;
         }
 
-        /* --- テーマ切り替えスイッチ --- */
+        /* --- テーマ切り替えボタン（独立ボタン形式へ刷新） --- */
         .theme-switch-container {
             position: absolute;
             top: 10px;
@@ -87,36 +97,34 @@
             display: flex;
             align-items: center;
             z-index: 10;
+            background: var(--toggle-bg);
+            padding: 4px;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
-        .theme-toggle-btn {
-            background: var(--toggle-bg);
+        .theme-btn {
+            background: transparent;
             border: none;
-            width: 48px;
-            height: 26px;
-            border-radius: 13px;
-            position: relative;
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--btn-inactive-text);
             cursor: pointer;
+            transition: all 0.25s ease;
             display: flex;
             align-items: center;
-            padding: 0 4px;
-            transition: background 0.3s ease;
+            gap: 4px;
+            user-select: none;
         }
 
-        .theme-toggle-circle {
-            width: 18px;
-            height: 18px;
-            background: #ffffff;
-            border-radius: 50%;
-            position: absolute;
-            left: 4px;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-        }
-
-        [data-theme="dark"] .theme-toggle-circle {
-            transform: translateX(22px);
-            background: #1e1b4b;
+        .theme-btn.active {
+            background: var(--btn-active-bg);
+            color: var(--btn-active-text);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         }
 
         /* --- ヘッダー / Google 検索セクション --- */
@@ -474,14 +482,11 @@
 <body data-theme="dark">
 
     <div class="container">
-        <!-- テーマ切り替えトグルスイッチ -->
         <div class="theme-switch-container">
-            <button class="theme-toggle-btn" id="themeToggle" aria-label="テーマ切り替え">
-                <div class="theme-toggle-circle"></div>
-            </button>
+            <button class="theme-btn" id="btnThemeLight">☀️ Light</button>
+            <button class="theme-btn" id="btnThemeDark">🌙 Dark</button>
         </div>
 
-        <!-- Google検索セクション -->
         <header>
             <div class="logo">PORTAL</div>
             <div class="search-container">
@@ -491,19 +496,15 @@
                 </form>
             </div>
             
-            <!-- ランダム名言・格言表示エリア -->
             <div class="quote-container">
                 <p class="quote-text" id="quoteDisplay" title="クリックで別の名言に変更します"></p>
             </div>
         </header>
 
-        <!-- メインレイアウト -->
         <div class="main-layout">
             
-            <!-- 左側：リンク集（均等に2列を形成、文字サイズ拡大済み） -->
             <main class="links-grid">
                 
-                <!-- Category 1 -->
                 <div class="category-card">
                     <h2 class="card-title">Search & Tech</h2>
                     <ul class="link-list">
@@ -514,7 +515,6 @@
                     </ul>
                 </div>
 
-                <!-- Category 2 -->
                 <div class="category-card">
                     <h2 class="card-title">News & Media</h2>
                     <ul class="link-list">
@@ -524,7 +524,6 @@
                     </ul>
                 </div>
 
-                <!-- Category 3 -->
                 <div class="category-card">
                     <h2 class="card-title">Social & Ent.</h2>
                     <ul class="link-list">
@@ -534,7 +533,6 @@
                     </ul>
                 </div>
 
-                <!-- Category 4 -->
                 <div class="category-card">
                     <h2 class="card-title">Tools & Services</h2>
                     <ul class="link-list">
@@ -546,10 +544,8 @@
 
             </main>
 
-            <!-- 右側：サイドバーエリア（1列分を確保） -->
             <aside class="sidebar-area">
 
-                <!-- デジタルクロックカード -->
                 <div class="sidebar-card">
                     <div class="clock-container">
                         <div class="clock-time" id="clockTime">00:00:00</div>
@@ -557,7 +553,6 @@
                     </div>
                 </div>
                 
-                <!-- カレンダーカード -->
                 <div class="sidebar-card">
                     <div class="calendar-header-container">
                         <button class="cal-btn" id="prevMonthBtn" title="前の月へ">◀</button>
@@ -575,7 +570,6 @@
                     </div>
                 </div>
 
-                <!-- Year Progress カード -->
                 <div class="sidebar-card">
                     <div class="progress-meta">
                         <span id="progressYearText">2026 Progress</span>
@@ -586,7 +580,6 @@
                     </div>
                 </div>
 
-                <!-- 一言ガラスメモカード -->
                 <div class="sidebar-card">
                     <h2 class="card-title" style="margin-bottom: 12px;">Quick Memo</h2>
                     <textarea class="memo-textarea" id="quickMemo" placeholder="ここにメモを残せます（自動保存されます）..."></textarea>
@@ -602,27 +595,40 @@
     </footer>
 
     <script>
-        // --- テーマ切り替えのロジック ---
-        const themeToggle = document.getElementById('themeToggle');
+        // --- テーマ切り替えのロジック（独立ボタン管理形式へ改修） ---
+        const btnLight = document.getElementById('btnThemeLight');
+        const btnDark = document.getElementById('btnThemeDark');
         const body = document.body;
 
+        function setTheme(theme) {
+            body.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            if (theme === 'light') {
+                btnLight.classList.add('active');
+                btnDark.classList.remove('active');
+            } else {
+                btnDark.classList.add('active');
+                btnLight.classList.remove('active');
+            }
+        }
+
+        // 初期設定の適用
         const savedTheme = localStorage.getItem('theme') || 'dark';
-        body.setAttribute('data-theme', savedTheme);
+        setTheme(savedTheme);
 
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = body.getAttribute('data-theme');
-            let newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            body.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-        });
+        btnLight.addEventListener('click', () => setTheme('light'));
+        btnDark.addEventListener('click', () => setTheme('dark'));
 
-        // --- スマート検索＆URL直接判定ロジック ---
+        // --- スマート検索＆URL直接判定ロジック（空欄時挙動を拡張） ---
         document.getElementById('searchForm').addEventListener('submit', function(e) {
             const input = this.querySelector('.search-input');
             const query = input.value.trim();
 
+            // 何も入れずに検索した場合
             if (!query) {
                 e.preventDefault();
+                window.open('https://www.google.com', '_blank');
                 return;
             }
 
