@@ -201,26 +201,40 @@ memoTextarea.addEventListener('input', () => {
     localStorage.setItem('portal_quick_memo', memoTextarea.value);
 });
 
-
 /* ==========================================================================
-   拡張子図鑑のデータ駆動＆プルダウン制御（カテゴリ無し並び替え版）
+   拡張子図鑑のデータ駆動 ＆ 高速検索フィルター機能
    ========================================================================== */
 
-// 拡張子図鑑を生成する関数
-function renderExtensionEncyclopedia() {
+// アコーディオンの開閉状態を管理するグローバル変数
+let isExtOpen = false;
+
+// 拡張子図鑑を生成・更新する関数
+function renderExtensionEncyclopedia(filterKeyword = '') {
     const gridContainer = document.getElementById('extGrid');
     if (!gridContainer) return;
 
     gridContainer.innerHTML = ''; // 一旦クリア
+    const keyword = filterKeyword.toLowerCase().trim();
 
-    // 配列の全データを1つのリストとしてそのまま流し込む
+    // 検索ワードがある場合は、拡張子(ext)か説明文(desc)に含まれているものだけを絞り込む
+    const filteredDb = extensionsDb.filter(item => {
+        return item.ext.toLowerCase().includes(keyword) || item.desc.toLowerCase().includes(keyword);
+    });
+
+    // 該当するものが1つもない場合は「見つかりません」を表示
+    if (filteredDb.length === 0) {
+        const noResult = document.createElement('div');
+        noResult.style.cssText = "grid-column: 1 / -1; color: var(--text-muted); text-align: center; padding: 24px 0; font-size: 0.95rem;";
+        noResult.textContent = "一致する拡張子が見つかりませんでした。";
+        gridContainer.appendChild(noResult);
+        return;
+    }
+
     const ul = document.createElement('ul');
     ul.className = "link-list";
-    // 画面幅に応じて3カラムに自動で美しく分割されるようCSSグリッドを設定
     ul.style.cssText = "display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px 24px; font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; width: 100%; grid-column: 1 / -1;";
     
-    // extensions-data.js のデータを登録順（ABC順）にそのまま要素化
-    extensionsDb.forEach(item => {
+    filteredDb.forEach(item => {
         const li = document.createElement('li');
         li.style.cssText = "margin-bottom: 0; list-style: none;";
         li.innerHTML = `<strong style="color: var(--text-main); font-size: 1.05rem;">${item.ext}</strong> - ${item.desc}`;
@@ -228,21 +242,41 @@ function renderExtensionEncyclopedia() {
     });
     
     gridContainer.appendChild(ul);
+
+    // 検索中（文字が入っている時）かつ図鑑が閉じている場合は、自動で中身を展開
+    if (keyword.length > 0 && !isExtOpen) {
+        forceOpenAccordion();
+    }
 }
 
-// プルダウン（アコーディオン）開閉制御ロジック
+// アコーディオンを外部から強制的に開く処理
+function forceOpenAccordion() {
+    const extContent = document.getElementById('extContent');
+    const extToggleIcon = document.getElementById('extToggleIcon');
+    if (!extContent || !extToggleIcon) return;
+
+    isExtOpen = true;
+    extContent.style.maxHeight = extContent.scrollHeight + "px";
+    extContent.style.marginTop = "16px";
+    extToggleIcon.style.transform = "rotate(180deg)";
+}
+
+// プルダウンおよび検索イベントの初期化ロジック
 function initExtensionAccordion() {
     const extHeader = document.getElementById('extHeader');
     const extContent = document.getElementById('extContent');
     const extToggleIcon = document.getElementById('extToggleIcon');
+    const extSearchInput = document.getElementById('extSearchInput');
     
-    if (!extHeader || !extContent || !extToggleIcon) return;
+    if (!extHeader || !extContent || !extToggleIcon || !extSearchInput) return;
 
-    let isOpen = false;
+    // ヘッダーがクリックされた時の開閉処理
+    extHeader.addEventListener('click', (e) => {
+        // 検索窓の中身がクリックされた時は、アコーディオンを閉じないようにガード
+        if (e.target === extSearchInput) return;
 
-    extHeader.addEventListener('click', () => {
-        isOpen = !isOpen;
-        if (isOpen) {
+        isExtOpen = !isExtOpen;
+        if (isExtOpen) {
             extContent.style.maxHeight = extContent.scrollHeight + "px";
             extContent.style.marginTop = "16px";
             extToggleIcon.style.transform = "rotate(180deg)";
@@ -250,6 +284,18 @@ function initExtensionAccordion() {
             extContent.style.maxHeight = "0";
             extContent.style.marginTop = "0";
             extToggleIcon.style.transform = "rotate(0deg)";
+            extSearchInput.value = ''; // 閉じたときは検索をリセット
+            renderExtensionEncyclopedia(); 
+        }
+    });
+
+    // 検索窓に文字が入力されるたびにリアルタイムでフィルターをかける
+    extSearchInput.addEventListener('input', (e) => {
+        const word = e.target.value;
+        renderExtensionEncyclopedia(word);
+        
+        if (isExtOpen) {
+            extContent.style.maxHeight = extContent.scrollHeight + "px";
         }
     });
 }
