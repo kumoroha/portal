@@ -123,10 +123,19 @@
 
             </aside>
 
+        </div> <div class="category-card" style="margin-top: 24px;">
+            <div id="extHeader" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none;">
+                <h2 class="card-title" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">Extension Encyclopedia / 拡張子図鑑</h2>
+                <span id="extToggleIcon" style="font-size: 1.2rem; color: var(--text-muted); transition: transform 0.3s ease;">▼</span>
+            </div>
+            
+            <div id="extContent" style="max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out, margin-top 0.4s ease;">
+                <div id="extGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; padding-top: 16px; border-top: 1px solid var(--card-border);">
+                    </div>
+            </div>
         </div>
-    </div>
 
-    <footer>
+    </div> <footer>
         © 2026 kumoroha.github.io
     </footer>
 
