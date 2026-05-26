@@ -51,22 +51,6 @@ document.getElementById('searchForm').addEventListener('submit', function(e) {
     }
 });
 
-// --- ジャンル限定ランダム名言・格言データベース ---
-const quotesDb = [
-    { text: "「ソフトウェアがいかに複雑であっても、それは最終的には単純なものの組み合わせに過ぎない。」", category: "Tech" },
-    { text: "「未来を予測する最善の方法は、それを発明することだ。」 — アラン・ケイ", category: "Tech" },
-    { text: "「完璧が達成されるのは、何も加えるものがなくなった時ではなく、何も削るものがなくなった時だ。」 — アントワーヌ・ド・サン＝テグジュペリ", category: "Tech" },
-    { text: "「Talk is cheap. Show me the code. (口舌は安っぽい。コードを見せろ。)」 — リーナス・トーバルズ", category: "Tech" },
-    { text: "「もう誰にも頼らない。誰に分かってもらう必要もない」 — 暁美ほむら（魔法少女まどか☆マギカ）", category: "Anime" },
-    { text: "「心配すんなよ、さやか。独りぼっちは、寂しいもんな……。いいよ、一緒にいてやるよ」 — 佐倉杏子（魔法少女まどか☆マギカ）", category: "Anime" },
-    { text: "「失ったものを数えちゃいけない。これから何を作るかが大事なんだよ」 — 錦木千束（リコリス・リコイル）", category: "Anime" },
-    { text: "「他人に期待するから、裏切られたように感じるのよ。最初から自分一人でやればいいの」 — アリサ・ミハイロヴナ・九条（時々ボソッとロシア語でデレる隣のアーリャさん）", category: "Anime" },
-    { text: "「奇跡も、魔法も、あるんだよ」 — 美樹さやか（魔法少女まどか☆マギカ）", category: "Anime" },
-    { text: "「もし、フェアな戦いをしているなら、それはあなたの戦術が間違っているということだ」 — デヴィッド・ハックワース（米陸軍大佐）", category: "Military" },
-    { text: "「作戦計画は、敵と接触した瞬間に大抵使い物にならなくなる。しかし、計画を立てるプロセスそのものが不可欠なのだ。」 — ヘルムート・フォン・モルトケ", category: "Military" },
-    { text: "「最も優れた戦術とは、戦わずして敵を屈服させることである。」 — 孫子" }
-];
-
 const filteredQuotes = quotesDb.filter(q => !q.text.startsWith('__'));
 
 function displayRandomQuote() {
