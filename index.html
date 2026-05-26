@@ -406,7 +406,7 @@
             box-shadow: 0 2px 8px var(--search-focus-glow);
         }
 
-        /* --- Year Progress バースタイル --- */
+        /* --- Progress バースタイル --- */
         .progress-meta {
             display: flex;
             justify-content: space-between;
@@ -536,8 +536,8 @@
                 <div class="category-card">
                     <h2 class="card-title">Tools & Services</h2>
                     <ul class="link-list">
-                        <li class="link-item"><a href="https://drive.google.com/drive/my-drive" target="_blank">Google&nbsp;Drive</a></li>
-                        <li class="link-item"><a href="https://gemini.google.com/" target="_blank">Google&nbsp;Gemini</a></li>
+                        <li class="link-item"><a href="https://drive.google.com/drive/my-drive" target="_blank">Google Drive</a></li>
+                        <li class="link-item"><a href="https://gemini.google.com/" target="_blank">Google Gemini</a></li>
                         <li class="link-item"><a href="https://maps.google.com" target="_blank">Google マップ</a></li>
                         <li class="link-item"><a href="https://www.wikipedia.org" target="_blank">Wikipedia</a></li>
                     </ul>
@@ -576,8 +576,16 @@
                         <span id="progressYearText">2026 Progress</span>
                         <span id="progressPercent">0.00%</span>
                     </div>
-                    <div class="progress-bar-container">
+                    <div class="progress-bar-container" style="margin-bottom: 16px;">
                         <div class="progress-bar-fill" id="progressBarFill"></div>
+                    </div>
+
+                    <div class="progress-meta">
+                        <span>Today Progress</span>
+                        <span id="progressDayPercent">0.00%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="progressBarDayFill"></div>
                     </div>
                 </div>
 
@@ -592,7 +600,7 @@
     </div>
 
     <footer>
-        &copy; 2026 kumoroha.github.io
+        © 2026 kumoroha.github.io
     </footer>
 
     <script>
@@ -607,7 +615,7 @@
             
             if (theme === 'light') {
                 btnLight.classList.add('active');
-                btnDark.classList.remove('active');
+                btnDark.remove('active');
             } else {
                 btnDark.classList.add('active');
                 btnLight.classList.remove('active');
@@ -654,7 +662,7 @@
             { text: "「Talk is cheap. Show me the code. (口舌は安っぽい。コードを見せろ。)」 — リーナス・トーバルズ", category: "Tech" },
             { text: "「もう誰にも頼らない。誰に分かってもらう必要もない」 — 暁美ほむら(魔法少女まどか⭐︎マギカ)", category: "Anime" },
             { text: "「心配すんなよ、さやか。独りぼっちは、寂しいもんな……。いいよ、一緒にいてやるよ」 — 佐倉杏子（魔法少女まどか⭐︎マギカ)", category: "Anime" },
-            { text: "「失ったものを数えちゃいけない。これから何を作るかが大事なんだよ」 — 錦木千束 (リコリス・リコイル)", category: "Anime" },
+            { text: "「失ったものを数えちゃいけない。これから何を作るかが大事んだよ」 — 錦木千束 (リコリス・リコイル)", category: "Anime" },
             { text: "「他人に期待するから、裏切られたように感じるのよ。最初から自分一人でやればいいの」 — アリサ・ミハイロヴナ・九条 (時々ボソッとロシア語でデレる隣のアーリャさん)", category: "Anime" },
             { text: "「奇跡も、魔法も、あるんだよ」 — 美樹さやか（魔法少女まどか⭐︎マギカ）", category: "Anime" },
             { text: "「もし、フェアな戦いをしているなら、それはあなたの戦術が間違っているということだ」 — デヴィッド・ハックワース(米陸軍大佐)", category: "Military" },
@@ -676,6 +684,8 @@
         displayRandomQuote();
 
         // --- リアルタイムデジタルクロック ---
+        let dayProgressCounter = 0; // 3分間引き用のカウンタ
+
         function updateClock() {
             const now = new Date();
             const year = now.getFullYear();
@@ -690,6 +700,14 @@
 
             document.getElementById('clockTime').innerText = `${hours}:${minutes}:${seconds}`;
             document.getElementById('clockDate').innerText = `${year}/${month}/${date} (${dayOfWeek})`;
+
+            // 初回起動時、または180秒（3分）が経過したタイミングでのみ1日の経過度を計算
+            if (dayProgressCounter === 0 || dayProgressCounter >= 180) {
+                calculateDayProgress(now);
+                dayProgressCounter = 1; // カウントリセット（1秒目）
+            } else {
+                dayProgressCounter++;
+            }
         }
         setInterval(updateClock, 1000);
         updateClock();
@@ -748,7 +766,7 @@
 
         generateCalendar();
 
-        // --- Year Progress ---
+        // --- Year Progress （2027年以降も自動対応） ---
         function calculateYearProgress() {
             const now = new Date();
             const year = now.getFullYear();
@@ -765,6 +783,18 @@
         }
         calculateYearProgress();
         setInterval(calculateYearProgress, 3600000);
+
+        // --- Day Progress (超省電力仕様・3分に1回駆動) ---
+        function calculateDayProgress(now) {
+            const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+            const totalSecondsInDay = 24 * 60 * 60; // 86400秒
+            
+            const passedSeconds = (now - startOfDay) / 1000;
+            const percentage = (passedSeconds / totalSecondsInDay * 100).toFixed(2);
+            
+            document.getElementById('progressDayPercent').innerText = `${percentage}%`;
+            document.getElementById('progressBarDayFill').style.width = `${percentage}%`;
+        }
 
         // --- 一言ガラスメモ ---
         const memoTextarea = document.getElementById('quickMemo');
