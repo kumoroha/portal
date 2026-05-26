@@ -67,12 +67,15 @@ const quotesDb = [
     { text: "「最も優れた戦術とは、戦わずして敵を屈服させることである。」 — 孫子" }
 ];
 
+// 特殊配列フィルタリング（実質的な名言の表示クリーンアップ）
+const filteredQuotes = quotesDb.filter(q => !q.text.startsWith('__'));
+
 function displayRandomQuote() {
     const quoteDisplay = document.getElementById('quoteDisplay');
     quoteDisplay.style.opacity = 0;
     setTimeout(() => {
-        const randomIndex = Math.floor(Math.random() * quotesDb.length);
-        quoteDisplay.innerText = quotesDb[randomIndex].text;
+        const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
+        quoteDisplay.innerText = filteredQuotes[randomIndex].text;
         quoteDisplay.style.opacity = 1;
     }, 250);
 }
@@ -81,7 +84,7 @@ document.getElementById('quoteDisplay').addEventListener('click', displayRandomQ
 displayRandomQuote();
 
 // --- リアルタイムデジタルクロック ---
-let dayProgressCounter = 0; // 3分間引き用の秒数カウンタ
+let dayProgressCounter = 0; 
 
 function updateClock() {
     const now = new Date();
@@ -95,14 +98,12 @@ function updateClock() {
     const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
     const dayOfWeek = weekdays[now.getDay()];
 
-    // 時計の表示更新（1秒ごと）
     document.getElementById('clockTime').innerText = `${hours}:${minutes}:${seconds}`;
     document.getElementById('clockDate').innerText = `${year}/${month}/${date} (${dayOfWeek})`;
 
-    // 初回起動時、または180秒（3分）が経過したタイミングでのみ1日の経過度を計算
     if (dayProgressCounter === 0 || dayProgressCounter >= 180) {
         calculateDayProgress(now);
-        dayProgressCounter = 1; // カウントリセット（1秒目）
+        dayProgressCounter = 1; 
     } else {
         dayProgressCounter++;
     }
@@ -164,7 +165,7 @@ document.getElementById('calendarLink').addEventListener('click', function(e) {
 
 generateCalendar();
 
-// --- Year Progress （2027年以降も自動対応・1時間ごと更新） ---
+// --- Year Progress ---
 function calculateYearProgress() {
     const now = new Date();
     const year = now.getFullYear();
@@ -182,10 +183,10 @@ function calculateYearProgress() {
 calculateYearProgress();
 setInterval(calculateYearProgress, 3600000);
 
-// --- Day Progress (超省電力仕様・3分に1回駆動) ---
+// --- Day Progress ---
 function calculateDayProgress(now) {
     const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
-    const totalSecondsInDay = 24 * 60 * 60; // 86400秒
+    const totalSecondsInDay = 24 * 60 * 60; 
     
     const passedSeconds = (now - startOfDay) / 1000;
     const percentage = (passedSeconds / totalSecondsInDay * 100).toFixed(2);
@@ -200,3 +201,71 @@ memoTextarea.value = localStorage.getItem('portal_quick_memo') || '';
 memoTextarea.addEventListener('input', () => {
     localStorage.setItem('portal_quick_memo', memoTextarea.value);
 });
+
+
+/* ==========================================================================
+   拡張子図鑑のデータ駆動＆プルダウン制御
+   ========================================================================== */
+
+// 拡張子図鑑を生成する関数
+function renderExtensionEncyclopedia() {
+    const gridContainer = document.getElementById('extGrid');
+    if (!gridContainer) return;
+
+    // グループ（3カラムのカテゴリ群）ごとにデータを分ける
+    const groups = ["Web & Document", "Programming & System", "Data & Media"];
+    gridContainer.innerHTML = ''; // 一旦クリア
+
+    groups.forEach(groupName => {
+        // extensions-data.js 側で定義された global の extensionsDb を参照します
+        const items = extensionsDb.filter(item => item.group === groupName);
+        
+        const columnDiv = document.createElement('div');
+        
+        const h3 = document.createElement('h3');
+        h3.style.cssText = "font-size: 1.1rem; color: var(--text-main); margin-bottom: 8px; border-left: 3px solid var(--accent-color); padding-left: 8px;";
+        h3.textContent = groupName;
+        columnDiv.appendChild(h3);
+        
+        const ul = document.createElement('ul');
+        ul.className = "link-list";
+        ul.style.cssText = "font-size: 0.95rem; color: var(--text-muted); line-height: 1.6;";
+        
+        items.forEach(item => {
+            const li = document.createElement('li');
+            li.innerHTML = `<strong>${item.ext}</strong> - ${item.desc}`;
+            ul.appendChild(li);
+        });
+        
+        columnDiv.appendChild(ul);
+        gridContainer.appendChild(columnDiv);
+    });
+}
+
+// プルダウン（アコーディオン）開閉制御ロジック
+function initExtensionAccordion() {
+    const extHeader = document.getElementById('extHeader');
+    const extContent = document.getElementById('extContent');
+    const extToggleIcon = document.getElementById('extToggleIcon');
+    
+    if (!extHeader || !extContent || !extToggleIcon) return;
+
+    let isOpen = false;
+
+    extHeader.addEventListener('click', () => {
+        isOpen = !isOpen;
+        if (isOpen) {
+            extContent.style.maxHeight = extContent.scrollHeight + "px";
+            extContent.style.marginTop = "16px";
+            extToggleIcon.style.transform = "rotate(180deg)";
+        } else {
+            extContent.style.maxHeight = "0";
+            extContent.style.marginTop = "0";
+            extToggleIcon.style.transform = "rotate(0deg)";
+        }
+    });
+}
+
+// 初期実行
+renderExtensionEncyclopedia();
+initExtensionAccordion();
