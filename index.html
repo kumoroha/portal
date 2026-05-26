@@ -123,10 +123,16 @@
 
             </aside>
 
-        </div> <div class="category-card" style="margin-top: 24px;">
-            <div id="extHeader" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none;">
-                <h2 class="card-title" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">Extension Encyclopedia / 拡張子図鑑</h2>
-                <span id="extToggleIcon" style="font-size: 1.2rem; color: var(--text-muted); transition: transform 0.3s ease;">▼</span>
+            <div class="category-card" style="margin-top: 24px;">
+            <div id="extHeader" style="display: flex; justify-content: space-between; align-items: center; user-select: none;">
+                <h2 class="card-title" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0; cursor: pointer;">Extension Encyclopedia / 拡張子図鑑</h2>
+                
+                <div style="flex-grow: 1; max-width: 300px; margin: 0 24px;">
+                    <input type="text" id="extSearchInput" placeholder="拡張子やキーワードで辞書を検索..." 
+                           style="width: 100%; padding: 6px 12px; font-size: 0.9rem; border: 1px solid var(--card-border); border-radius: 6px; background: rgba(255, 255, 255, 0.05); color: var(--text-main); outline: none; transition: border-color 0.3s;">
+                </div>
+
+                <span id="extToggleIcon" style="font-size: 1.2rem; color: var(--text-muted); transition: transform 0.3s ease; cursor: pointer;">▼</span>
             </div>
             
             <div id="extContent" style="max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out, margin-top 0.4s ease;">
