@@ -231,12 +231,15 @@ function renderExtensionEncyclopedia(filterKeyword = '') {
     }
 
     const ul = document.createElement('ul');
-    ul.className = "link-list";
-    ul.style.cssText = "display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 24px; font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; width: 100%; grid-column: 1 / -1;";
+    // 🚨 古い class="link-list" の影響を完全に断ち切るため、クラス名を無効化するか外します
+    ul.className = "ext-dictionary-grid"; 
+    
+    // 👇 !important を付与して、CSSファイル側の古い設定を絶対に寄せ付けない無敵の3カラム命令にします
+    ul.style.cssText = "display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 12px 24px !important; font-size: 0.95rem !important; color: var(--text-muted) !important; line-height: 1.6 !important; width: 100% !important; grid-column: 1 / -1 !important; list-style: none !important; padding: 0 !important; margin: 0 !important;";
     
     filteredDb.forEach(item => {
         const li = document.createElement('li');
-        li.style.cssText = "margin-bottom: 0; list-style: none;";
+        li.style.cssText = "margin-bottom: 0 !important; list-style: none !important; padding: 0 !important;";
         li.innerHTML = `<strong style="color: var(--text-main); font-size: 1.05rem;">${item.ext}</strong> - ${item.desc}`;
         ul.appendChild(li);
     });
