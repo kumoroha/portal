@@ -232,7 +232,7 @@ function renderExtensionEncyclopedia(filterKeyword = '') {
 
     const ul = document.createElement('ul');
     ul.className = "link-list";
-    ul.style.cssText = "display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px 24px; font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; width: 100%; grid-column: 1 / -1;";
+    ul.style.cssText = "display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 24px; font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; width: 100%; grid-column: 1 / -1;";
     
     filteredDb.forEach(item => {
         const li = document.createElement('li');
