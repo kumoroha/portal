@@ -1,0 +1,474 @@
+/* ==========================================================================
+   style.css - Portal Page Design System
+   ========================================================================== */
+
+/* --- デザインシステム & 変数 --- */
+:root {
+    /* ライトテーマ変数 */
+    --bg-gradient: linear-gradient(135deg, #e0e8f5 0%, #e2e8f0 50%, #f5e3e6 100%);
+    --card-bg: rgba(255, 255, 255, 0.65);
+    --card-border: #cbd5e1;
+    --card-hover-border: #94a3b8;
+    --text-main: #0f172a;
+    --text-muted: #333333;
+    --search-bg: #ffffff;
+    --search-border: #94a3b8;
+    --search-focus-border: #3b82f6;
+    --search-focus-glow: rgba(59, 130, 246, 0.15);
+    --accent-color: #2563eb;
+    --accent-gradient: linear-gradient(to right, #2563eb, #3b82f6, #06b6d4);
+    --toggle-bg: #cbd5e1;
+    --cal-today-bg: #2563eb;
+    --cal-today-text: #ffffff;
+    --bar-bg: #e2e8f0;
+    
+    /* ボタン用追加変数 */
+    --btn-active-bg: #ffffff;
+    --btn-active-text: #0f172a;
+    --btn-inactive-text: #64748b;
+}
+
+[data-theme="dark"] {
+    /* ダークテーマ変数 */
+    --bg-gradient: linear-gradient(135deg, #0a1128 0%, #1c1a3a 50%, #0d0c1d 100%);
+    --card-bg: rgba(255, 255, 255, 0.03);
+    --card-border: rgba(255, 255, 255, 0.12);
+    --card-hover-border: rgba(99, 102, 241, 0.5);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --search-bg: rgba(15, 23, 42, 0.6);
+    --search-border: rgba(255, 255, 255, 0.2);
+    --search-focus-border: #6366f1;
+    --search-focus-glow: rgba(99, 102, 241, 0.25);
+    --accent-color: #a5b4fc;
+    --accent-gradient: linear-gradient(to right, #6366f1, #a855f7, #ec4899);
+    --toggle-bg: #1e293b;
+    --cal-today-bg: #6366f1;
+    --cal-today-text: #ffffff;
+    --bar-bg: rgba(255, 255, 255, 0.07);
+    
+    /* ボタン用追加変数 */
+    --btn-active-bg: #334155;
+    --btn-active-text: #f8fafc;
+    --btn-inactive-text: #94a3b8;
+}
+
+/* --- 基本スタイル --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    background: var(--bg-gradient);
+    background-size: 200% 200%;
+    animation: gradientMove 12s ease infinite;
+    color: var(--text-main);
+    min-height: 100vh;
+    padding: 10px 20px 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: background 0.4s ease, color 0.4s ease;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.container {
+    width: 100%;
+    max-width: 1240px;
+    position: relative;
+}
+
+/* --- テーマ切り替えボタン --- */
+.theme-switch-container {
+    position: absolute;
+    top: 10px;
+    right: 0;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+    background: var(--toggle-bg);
+    padding: 4px;
+    border-radius: 20px;
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.theme-btn {
+    background: transparent;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--btn-inactive-text);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    user-select: none;
+}
+
+.theme-btn.active {
+    background: var(--btn-active-bg);
+    color: var(--btn-active-text);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* --- ヘッダー / Google 検索セクション --- */
+header {
+    text-align: center;
+    margin-bottom: 35px;
+    padding: 10px 0 0 0;
+}
+
+.logo {
+    font-size: 3.2rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 15px;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.search-container {
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    background: var(--search-bg);
+    border: 2px solid var(--search-border);
+    border-radius: 30px;
+    padding: 4px 6px 4px 24px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.search-form:focus-within {
+    border-color: var(--search-focus-border);
+    box-shadow: 0 0 20px var(--search-focus-glow), 0 4px 15px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+.search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-main);
+    font-size: 1.05rem;
+    height: 44px;
+}
+
+.search-input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.6;
+}
+
+.search-button {
+    background: var(--accent-gradient);
+    border: none;
+    color: white;
+    padding: 0 24px;
+    height: 44px;
+    border-radius: 22px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.search-button:hover {
+    opacity: 0.9;
+}
+
+/* --- ランダム名言・格言用スタイル --- */
+.quote-container {
+    margin-top: 12px;
+    min-height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.quote-text {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-style: italic;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: color 0.3s ease, opacity 0.3s ease;
+    max-width: 600px;
+    line-height: 1.4;
+    opacity: 1;
+}
+
+.quote-text:hover {
+    color: var(--text-main);
+}
+
+/* --- メインレイアウト --- */
+.main-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+/* 左側：リンク集 */
+.links-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+/* 右側：サイドバーエリア */
+.sidebar-area {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* カードの共通デザイン */
+.category-card, .sidebar-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: all 0.3s ease;
+}
+
+.category-card:hover, .sidebar-card:hover {
+    border-color: var(--card-hover-border);
+    transform: translateY(-4px);
+}
+
+[data-theme="dark"] .category-card:hover, [data-theme="dark"] .sidebar-card:hover {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.05);
+}
+
+[data-theme="light"] .category-card:hover, [data-theme="light"] .sidebar-card:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.card-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--accent-color);
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 8px;
+}
+
+/* リンクアイテム */
+.link-list {
+    list-style: none;
+}
+
+.link-item {
+    margin-bottom: 14px;
+}
+
+.link-item:last-child {
+    margin-bottom: 0;
+}
+
+.link-item a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: color 0.2s ease, padding-left 0.2s ease;
+    display: inline-block;
+}
+
+.link-item a:hover {
+    color: var(--text-main);
+    padding-left: 4px;
+}
+
+/* --- デジタルクロックスタイル --- */
+.clock-container {
+    text-align: center;
+    padding: 4px 0;
+}
+.clock-time {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.clock-date {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+    letter-spacing: 1px;
+}
+
+/* --- カレンダー詳細スタイル --- */
+.calendar-header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding: 0 8px;
+}
+
+.cal-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.cal-btn:hover {
+    color: var(--text-main);
+    background: var(--bar-bg);
+}
+
+.calendar-link {
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    color: var(--text-main);
+    text-decoration: none;
+    display: inline-block;
+    transition: color 0.2s ease;
+}
+
+.calendar-link:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+.weekday {
+    font-weight: 600;
+    color: var(--text-muted);
+    padding-bottom: 4px;
+}
+
+.weekday:nth-child(7) { color: #3b82f6; } 
+.weekday:nth-child(1) { color: #ef4444; } 
+
+.day {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--text-main);
+}
+
+.day.empty {
+    cursor: default;
+}
+
+.day.today {
+    background: var(--cal-today-bg);
+    color: var(--cal-today-text) !important;
+    font-weight: 700;
+    box-shadow: 0 2px 8px var(--search-focus-glow);
+}
+
+/* --- Progress バースタイル --- */
+.progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+.progress-bar-container {
+    background: var(--bar-bg);
+    border-radius: 6px;
+    height: 8px;
+    overflow: hidden;
+    position: relative;
+}
+.progress-bar-fill {
+    height: 100%;
+    background: var(--accent-gradient);
+    width: 0%;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 6px;
+}
+
+/* --- 一言ガラスメモスタイル --- */
+.memo-textarea {
+    width: 100%;
+    height: 90px;
+    background: transparent;
+    border: 1px solid var(--search-border);
+    border-radius: 10px;
+    padding: 12px;
+    color: var(--text-main);
+    font-size: 0.9rem;
+    resize: none;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+}
+.memo-textarea:focus {
+    border-color: var(--search-focus-border);
+}
+.memo-textarea::placeholder {
+    color: var(--text-muted);
+    opacity: 0.4;
+}
+
+/* --- フッター --- */
+footer {
+    margin-top: auto;
+    padding-top: 40px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    opacity: 0.6;
+    text-align: center;
+}
+
+/* --- レスポンシブコード --- */
+@media (max-width: 768px) {
+    .main-layout {
+        grid-template-columns: 1fr;
+    }
+    .links-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 480px) {
+    .links-grid {
+        grid-template-columns: 1fr;
+    }
+    .logo { font-size: 2.2rem; }
+}
