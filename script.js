@@ -67,7 +67,6 @@ const quotesDb = [
     { text: "「最も優れた戦術とは、戦わずして敵を屈服させることである。」 — 孫子" }
 ];
 
-// 特殊配列フィルタリング（実質的な名言の表示クリーンアップ）
 const filteredQuotes = quotesDb.filter(q => !q.text.startsWith('__'));
 
 function displayRandomQuote() {
@@ -204,7 +203,7 @@ memoTextarea.addEventListener('input', () => {
 
 
 /* ==========================================================================
-   拡張子図鑑のデータ駆動＆プルダウン制御
+   拡張子図鑑のデータ駆動＆プルダウン制御（カテゴリ無し並び替え版）
    ========================================================================== */
 
 // 拡張子図鑑を生成する関数
@@ -212,34 +211,23 @@ function renderExtensionEncyclopedia() {
     const gridContainer = document.getElementById('extGrid');
     if (!gridContainer) return;
 
-    // グループ（3カラムのカテゴリ群）ごとにデータを分ける
-    const groups = ["Web & Document", "Programming & System", "Data & Media"];
     gridContainer.innerHTML = ''; // 一旦クリア
 
-    groups.forEach(groupName => {
-        // extensions-data.js 側で定義された global の extensionsDb を参照します
-        const items = extensionsDb.filter(item => item.group === groupName);
-        
-        const columnDiv = document.createElement('div');
-        
-        const h3 = document.createElement('h3');
-        h3.style.cssText = "font-size: 1.1rem; color: var(--text-main); margin-bottom: 8px; border-left: 3px solid var(--accent-color); padding-left: 8px;";
-        h3.textContent = groupName;
-        columnDiv.appendChild(h3);
-        
-        const ul = document.createElement('ul');
-        ul.className = "link-list";
-        ul.style.cssText = "font-size: 0.95rem; color: var(--text-muted); line-height: 1.6;";
-        
-        items.forEach(item => {
-            const li = document.createElement('li');
-            li.innerHTML = `<strong>${item.ext}</strong> - ${item.desc}`;
-            ul.appendChild(li);
-        });
-        
-        columnDiv.appendChild(ul);
-        gridContainer.appendChild(columnDiv);
+    // 配列の全データを1つのリストとしてそのまま流し込む
+    const ul = document.createElement('ul');
+    ul.className = "link-list";
+    // 画面幅に応じて3カラムに自動で美しく分割されるようCSSグリッドを設定
+    ul.style.cssText = "display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px 24px; font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; width: 100%; grid-column: 1 / -1;";
+    
+    // extensions-data.js のデータを登録順（ABC順）にそのまま要素化
+    extensionsDb.forEach(item => {
+        const li = document.createElement('li');
+        li.style.cssText = "margin-bottom: 0; list-style: none;";
+        li.innerHTML = `<strong style="color: var(--text-main); font-size: 1.05rem;">${item.ext}</strong> - ${item.desc}`;
+        ul.appendChild(li);
     });
+    
+    gridContainer.appendChild(ul);
 }
 
 // プルダウン（アコーディオン）開閉制御ロジック
