@@ -215,14 +215,13 @@ function setupCalendarHeader() {
     selectMonth.value = calDate.getMonth();
 }
 
-// 元々上部にあったカレンダーリンクを自動的に回収し、カレンダーの下部にボタン風にして移植する
+// カレンダーの下部に美しいボタン風のGoogleカレンダーリンクをゼロから自動生成する
 function moveCalendarLink() {
-    if (document.readyState === 'loading') return; // 💡DOM読み込み中の空振りを防ぐ安全装置
-    const originalLink = document.querySelector('.calendar-link');
+    if (document.readyState === 'loading') return;
     const calGrid = document.getElementById('calendarGrid');
     
-    if (originalLink && calGrid) {
-        // すでに移動済みの下部リンクが存在するかチェック
+    if (calGrid) {
+        // すでに生成済みの下部リンクが存在するかチェック（重複防止）
         let bottomLinkContainer = document.getElementById('calBottomLinkContainer');
         if (!bottomLinkContainer) {
             bottomLinkContainer = document.createElement('div');
@@ -230,35 +229,41 @@ function moveCalendarLink() {
             bottomLinkContainer.style.marginTop = '16px';
             bottomLinkContainer.style.textAlign = 'center';
             
-            // リンクをカードのデザインに馴染む美しい「ボタン風」に整形
-            originalLink.style.display = 'inline-block';
-            originalLink.style.width = '100%';
-            originalLink.style.padding = '8px 12px';
-            originalLink.style.fontSize = '0.9rem';
-            originalLink.style.fontWeight = '600';
-            originalLink.style.textAlign = 'center';
-            originalLink.style.textDecoration = 'none';
-            originalLink.style.border = '1px solid var(--card-border)';
-            originalLink.style.borderRadius = '8px';
-            originalLink.style.background = 'var(--bar-bg)';
-            originalLink.style.color = 'var(--text-main)';
-            originalLink.style.transition = 'all 0.2s ease';
+            // ゼロから新しくGoogleカレンダーへのAタグ（リンクボタン）を生成
+            const newLink = document.createElement('a');
+            newLink.href = 'https://calendar.google.com';
+            newLink.target = '_blank';
+            newLink.textContent = 'Google Calendar'; // ボタンに表示する文字
+            
+            // リンクをポータルのデザインに馴染む美しい「ガラス風ボタン」に整形
+            newLink.style.display = 'inline-block';
+            newLink.style.width = '100%';
+            newLink.style.padding = '8px 12px';
+            newLink.style.fontSize = '0.9rem';
+            newLink.style.fontWeight = '600';
+            newLink.style.textAlign = 'center';
+            newLink.style.textDecoration = 'none';
+            newLink.style.border = '1px solid var(--card-border)';
+            newLink.style.borderRadius = '8px';
+            newLink.style.background = 'var(--bar-bg)';
+            newLink.style.color = 'var(--text-main)';
+            newLink.style.transition = 'all 0.2s ease';
             
             // ホバーエフェクトの制御
-            originalLink.addEventListener('mouseenter', () => {
-                originalLink.style.borderColor = 'var(--search-focus-border)';
-                originalLink.style.background = 'var(--search-bg)';
-                originalLink.style.boxShadow = '0 2px 8px var(--search-focus-glow)';
+            newLink.addEventListener('mouseenter', () => {
+                newLink.style.borderColor = 'var(--search-focus-border)';
+                newLink.style.background = 'var(--search-bg)';
+                newLink.style.boxShadow = '0 2px 8px var(--search-focus-glow)';
             });
-            originalLink.addEventListener('mouseleave', () => {
-                originalLink.style.borderColor = 'var(--card-border)';
-                originalLink.style.background = 'var(--bar-bg)';
-                originalLink.style.boxShadow = 'none';
+            newLink.addEventListener('mouseleave', () => {
+                newLink.style.borderColor = 'var(--card-border)';
+                newLink.style.background = 'var(--bar-bg)';
+                newLink.style.boxShadow = 'none';
             });
 
-            // カレンダーグリッドのすぐ後ろ（下）に挿入
+            // 生成したボタンをコンテナに入れ、カレンダーグリッドのすぐ後ろ（下）に挿入
+            bottomLinkContainer.appendChild(newLink);
             calGrid.parentNode.insertBefore(bottomLinkContainer, calGrid.nextSibling);
-            bottomLinkContainer.appendChild(originalLink);
         }
     }
 }
