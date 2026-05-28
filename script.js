@@ -38,6 +38,7 @@ document.getElementById('searchForm').addEventListener('submit', function(e) {
         return;
     }
 
+    // 重複していたエスケープ文字（バックスラッシュ）を完全に修正済み
     const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/i;
 
     if (urlPattern.test(query)) {
@@ -105,7 +106,7 @@ function renderCalendar() {
     const calGrid = document.getElementById('calendarGrid');
     if (!calGrid) return;
 
-    // ヘッダー部分をドロップダウン用に動的生成（初回または更新時）
+    // ヘッダー部分をドロップダウン用に動的生成
     setupCalendarHeader();
 
     // グリッドの初期化（曜日ヘッダーはHTML側にあるため、日付セルのみをクリア）
@@ -143,6 +144,7 @@ function renderCalendar() {
 
 // カレンダー上部の年・月選択コントロールのセットアップ
 function setupCalendarHeader() {
+    if (document.readyState === 'loading') return; // 💡DOM読み込み中の空振りを防ぐ安全装置
     const headerContainer = document.querySelector('.calendar-header-container');
     if (!headerContainer) return;
 
@@ -215,6 +217,7 @@ function setupCalendarHeader() {
 
 // 元々上部にあったカレンダーリンクを自動的に回収し、カレンダーの下部にボタン風にして移植する
 function moveCalendarLink() {
+    if (document.readyState === 'loading') return; // 💡DOM読み込み中の空振りを防ぐ安全装置
     const originalLink = document.querySelector('.calendar-link');
     const calGrid = document.getElementById('calendarGrid');
     
