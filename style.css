@@ -468,8 +468,8 @@ footer {
 }
 
 /* --- レスポンシブコード（画面サイズに応じて自動最適化） --- */
-@media (max-width: 1024px) {
-    /* iPadの縦向き（820px）や、それ以下のタブレットサイズでの防衛策 */
+@media (max-width: 850px) {
+    /* iPadの縦向き（820px）や、小さめのタブレット・ミニ画面でのみ発動 */
     .main-layout {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -478,16 +478,17 @@ footer {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .sidebar-area {
-        grid-column: span 2; /* カレンダー等は下に回り込んでワイドに表示 */
+        grid-column: span 2; /* カレンダー等は下に回り込んで表示 */
     }
 }
 
-@media (max-width: 768px) {
-    /* スマホサイズ：すべて縦1列にすっきり並べる */
+@media (max-width: 480px) {
+    /* スマホ縦画面：すべて縦1列にすっきり並べる */
     .main-layout, .links-grid {
         grid-template-columns: 1fr;
     }
     .links-grid, .sidebar-area {
         grid-column: span 1;
     }
+    .logo { font-size: 2.2rem; }
 }
