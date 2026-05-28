@@ -38,7 +38,7 @@ document.getElementById('searchForm').addEventListener('submit', function(e) {
         return;
     }
 
-    const urlPattern = /^(https?:\\/\\/)?([\\da-z.-]+)\\.([a-z.]{2,6})([\\/\\w .-]*)*\\/?$/i;
+    const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/i;
 
     if (urlPattern.test(query)) {
         e.preventDefault();
