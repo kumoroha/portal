@@ -38,7 +38,7 @@ document.getElementById('searchForm').addEventListener('submit', function(e) {
         return;
     }
 
-    // 重複していたエスケープ文字（バックスラッシュ）を完全に修正済み
+    // 正規表現のエスケープ文字重複を完全に修正済み
     const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/i;
 
     if (urlPattern.test(query)) {
@@ -99,7 +99,7 @@ function updateClock() {
     setTimeout(updateClock, msUntilNextSecond);
 }
 
-// --- カレンダーロジック（ドロップダウン＆ボタン移動対応版） ---
+// --- カレンダーロジック（ドロップダウン＆ボタン自動生成対応版） ---
 let calDate = new Date();
 
 function renderCalendar() {
@@ -144,7 +144,7 @@ function renderCalendar() {
 
 // カレンダー上部の年・月選択コントロールのセットアップ
 function setupCalendarHeader() {
-    if (document.readyState === 'loading') return; // 💡DOM読み込み中の空振りを防ぐ安全装置
+    if (document.readyState === 'loading') return;
     const headerContainer = document.querySelector('.calendar-header-container');
     if (!headerContainer) return;
 
@@ -206,7 +206,7 @@ function setupCalendarHeader() {
             renderCalendar();
         });
 
-        // Googleカレンダーリンクをカレンダーの「真下」へ移動・整形する処理
+        // Googleカレンダーリンクをゼロから自動生成してカレンダーの下に挿入する
         moveCalendarLink();
     }
 
@@ -215,13 +215,12 @@ function setupCalendarHeader() {
     selectMonth.value = calDate.getMonth();
 }
 
-// カレンダーの下部に美しいボタン風のGoogleカレンダーリンクをゼロから自動生成する
+// カレンダーの下部に美しいボタン風のGoogleカレンダーリンクをゼロから自動生成する（エラー防止安全版）
 function moveCalendarLink() {
     if (document.readyState === 'loading') return;
     const calGrid = document.getElementById('calendarGrid');
     
     if (calGrid) {
-        // すでに生成済みの下部リンクが存在するかチェック（重複防止）
         let bottomLinkContainer = document.getElementById('calBottomLinkContainer');
         if (!bottomLinkContainer) {
             bottomLinkContainer = document.createElement('div');
@@ -229,13 +228,12 @@ function moveCalendarLink() {
             bottomLinkContainer.style.marginTop = '16px';
             bottomLinkContainer.style.textAlign = 'center';
             
-            // ゼロから新しくGoogleカレンダーへのAタグ（リンクボタン）を生成
             const newLink = document.createElement('a');
             newLink.href = 'https://calendar.google.com';
             newLink.target = '_blank';
-            newLink.textContent = 'Google Calendar'; // ボタンに表示する文字
+            newLink.textContent = 'Google Calendar';
             
-            // リンクをポータルのデザインに馴染む美しい「ガラス風ボタン」に整形
+            // 透過ガラス調ボタンのデザインスタイル適用
             newLink.style.display = 'inline-block';
             newLink.style.width = '100%';
             newLink.style.padding = '8px 12px';
@@ -249,7 +247,6 @@ function moveCalendarLink() {
             newLink.style.color = 'var(--text-main)';
             newLink.style.transition = 'all 0.2s ease';
             
-            // ホバーエフェクトの制御
             newLink.addEventListener('mouseenter', () => {
                 newLink.style.borderColor = 'var(--search-focus-border)';
                 newLink.style.background = 'var(--search-bg)';
@@ -261,14 +258,13 @@ function moveCalendarLink() {
                 newLink.style.boxShadow = 'none';
             });
 
-            // 生成したボタンをコンテナに入れ、カレンダーグリッドのすぐ後ろ（下）に挿入
             bottomLinkContainer.appendChild(newLink);
             calGrid.parentNode.insertBefore(bottomLinkContainer, calGrid.nextSibling);
         }
     }
 }
 
-// --- 今年（2026年）の経過プログレスバーロジック ---
+// --- 今年の経過プログレスバーロジック ---
 function updateYearProgress() {
     const progressFill = document.getElementById('progressFill');
     const progressPercent = document.getElementById('progressPercent');
