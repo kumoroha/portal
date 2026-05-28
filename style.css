@@ -1,5 +1,5 @@
 /* ==========================================================================
-   style.css - Portal Page Design System
+   style.css - Portal Page Design System (4-Column Edition)
    ========================================================================== */
 
 /* --- デザインシステム & 変数 --- */
@@ -221,26 +221,36 @@ header {
     color: var(--text-main);
 }
 
-/* --- メインレイアウト --- */
+/* --- メインレイアウト（4カラム・グリッドシステム） --- */
 .main-layout {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    /* パソコン・iPad横：左3カラム(均等割り) ＋ 右1カラム(320px固定) の計4カラムを構成 */
+    grid-template-columns: repeat(3, minmax(0, 1fr)) 320px;
     gap: 24px;
     align-items: flex-start;
+    width: 100%;
 }
 
-/* 左側：リンク集 */
+/* 左側3列：リンク集コンテナ */
 .links-grid {
+    grid-column: span 3; /* 全4列のうち左から3列分をダイナミックに独占 */
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    /* その内側で、カテゴリカードを3列で綺麗に横並びにする */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 24px;
 }
 
-/* 右側：サイドバーエリア */
+/* 右側4列目：サイドバーエリア */
 .sidebar-area {
+    grid-column: 4; /* 明示的に4番目の列に配置 */
     display: flex;
     flex-direction: column;
     gap: 24px;
+}
+
+/* 最下部全占領：拡張子図鑑カード */
+.extension-encyclopedia-card {
+    grid-column: 1 / -1; /* 1カラム目から最後の右端列まで全てをぶち抜きで占領 */
 }
 
 /* カードの共通デザイン */
@@ -457,18 +467,27 @@ footer {
     text-align: center;
 }
 
-/* --- レスポンシブコード --- */
-@media (max-width: 768px) {
+/* --- レスポンシブコード（画面サイズに応じて自動最適化） --- */
+@media (max-width: 1200px) {
     .main-layout {
-        grid-template-columns: 1fr;
+        /* タブレットサイズ（iPad等）：窮屈にならないよう2列構成に変形 */
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .links-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-column: span 2;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .sidebar-area {
+        grid-column: span 2; /* カレンダー等は下に回り込んでワイドに表示 */
     }
 }
-@media (max-width: 480px) {
-    .links-grid {
+
+@media (max-width: 768px) {
+    .main-layout, .links-grid {
+        /* スマホサイズ：すべて縦1列にすっきり並べる */
         grid-template-columns: 1fr;
     }
-    .logo { font-size: 2.2rem; }
+    .links-grid, .sidebar-area {
+        grid-column: span 1;
+    }
 }
