@@ -468,9 +468,9 @@ footer {
 }
 
 /* --- レスポンシブコード（画面サイズに応じて自動最適化） --- */
-@media (max-width: 1200px) {
+@media (max-width: 1024px) {
+    /* iPadの縦向き（820px）や、それ以下のタブレットサイズでの防衛策 */
     .main-layout {
-        /* タブレットサイズ（iPad等）：窮屈にならないよう2列構成に変形 */
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .links-grid {
@@ -483,8 +483,8 @@ footer {
 }
 
 @media (max-width: 768px) {
+    /* スマホサイズ：すべて縦1列にすっきり並べる */
     .main-layout, .links-grid {
-        /* スマホサイズ：すべて縦1列にすっきり並べる */
         grid-template-columns: 1fr;
     }
     .links-grid, .sidebar-area {
